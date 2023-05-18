@@ -320,6 +320,161 @@ class Pet:
     def num_of_pets(cls):
         return len(cls.LIST_INSTANCE)
 
+# 5
+"""
+
+Класс StrExtension
+Реализуйте класс StrExtension, описывающий набор функций для работы со строками. При создании экземпляра класс не должен принимать никаких аргументов.
+
+Класс StrExtension должен иметь три статических метода:
+
+remove_vowels() — метод, который принимает в качестве аргумента строку, удаляет из нее все гласные латинские буквы без учета регистра и возвращает полученный результат
+leave_alpha() — метод, который принимает в качестве аргумента строку, удаляет из нее все символы, не являющиеся латинскими буквами, и возвращает полученный результат
+replace_all() — метод, который принимает три строковых аргумента string, chars и char, заменяет в строке string все символы из chars на char с учетом регистра и возвращает полученный результат.
+Примечание 1. Гарантируется, что все буквенные символы относятся к латинскому алфавиту.
+
+Примечание 2. Латинские гласные буквы: a, e, i, o, u, y.
+
+Примечание 3. Дополнительная проверка данных на корректность не требуется. Гарантируется, что реализованный класс используется только с корректными данными.
+
+Примечание 4. Тестовые данные доступны по ссылкам:
+
+Архив с тестами
+GitHub
+Sample Input 1:
+
+print(StrExtension.remove_vowels('Python'))
+print(StrExtension.remove_vowels('Stepik'))
+Sample Output 1:
+
+Pthn
+Stpk
+Sample Input 2:
+
+print(StrExtension.leave_alpha('Python111'))
+print(StrExtension.leave_alpha('__Stepik__()'))
+Sample Output 2:
+
+Python
+Stepik
+Sample Input 3:
+
+print(StrExtension.replace_all('Python', 'Ptn', '-'))
+print(StrExtension.replace_all('Stepik', 'stk', '#'))
+Sample Output 3:
+
+-y-ho-
+S#epi#
+
+"""
+import re
+class StrExtension:
+    PATTERN_V = r'[aeiouyAEIOUY]'
+    PATTERN_A = r'[^a-zA-Z]'
+    @staticmethod
+    def remove_vowels(string: str) -> str:
+        new_string = re.sub(StrExtension.PATTERN_V, '', string)
+        return new_string
+
+    @staticmethod
+    def leave_alpha(string: str) -> str:
+        new_string = re.sub(StrExtension.PATTERN_A, '', string)
+        return new_string
+
+    @staticmethod
+    def replace_all(string: str, chars: str, char: str) -> str:
+        PATTERN = h = re.compile(fr'[{chars}]')
+        new_string = re.sub(PATTERN, char, string)
+        return new_string
+
+
+# 6
+"""
+
+Класс CaseHelper 🌶️
+Snake Case — стиль написания составных слов, при котором несколько слов разделяются символом нижнего подчеркивания (_) и не имеют пробелов в записи, причём каждое слово пишется с маленькой буквы. Например, bee_geek и hello_world.
+
+Upper Camel Case — стиль написания составных слов, при котором несколько слов пишутся слитно без пробелов, при этом каждое слово пишется с заглавной буквы. Например, BeeGeek и HelloWorld.
+
+Реализуйте класс CaseHelper, описывающий набор функций для работы со строками в стилях Snake Case и Upper Camel Case. При создании экземпляра класс не должен принимать никаких аргументов.
+
+Класс CaseHelper должен иметь четыре статических метода:
+
+is_snake() — метод, принимающий в качестве аргумента строку и возвращающий True, если переданная строка записана в стиле Snake Case, или False в противном случае
+is_upper_camel() — метод, принимающий в качестве аргумента строку и возвращающий True, если переданная строка записана в стиле Upper Camel Case, или False в противном случае
+to_snake() — метод, который принимает в качестве аргумента строку в стиле Upper Camel Case, записывает ее в стиле Snake Case и возвращает полученный результат
+to_upper_camel() — метод, который принимает в качестве аргумента строку в стиле Snake Case, записывает ее в стиле Upper Camel Case и возвращает полученный результат
+Примечание 1. Дополнительная проверка данных на корректность не требуется. Гарантируется, что реализованный класс используется только с корректными данными.
+
+Примечание 2. Тестовые данные доступны по ссылкам:
+
+Архив с тестами
+GitHub
+Sample Input 1:
+
+print(CaseHelper.is_snake('beegeek'))
+print(CaseHelper.is_snake('bee_geek'))
+print(CaseHelper.is_snake('Beegeek'))
+print(CaseHelper.is_snake('BeeGeek'))
+Sample Output 1:
+
+True
+True
+False
+False
+Sample Input 2:
+
+print(CaseHelper.is_upper_camel('beegeek'))
+print(CaseHelper.is_upper_camel('bee_geek'))
+print(CaseHelper.is_upper_camel('Beegeek'))
+print(CaseHelper.is_upper_camel('BeeGeek'))
+Sample Output 2:
+
+False
+False
+True
+True
+Sample Input 3:
+
+print(CaseHelper.to_snake('Beegeek'))
+print(CaseHelper.to_snake('BeeGeek'))
+Sample Output 3:
+
+beegeek
+bee_geek
+Sample Input 4:
+
+print(CaseHelper.to_upper_camel('beegeek'))
+print(CaseHelper.to_upper_camel('bee_geek'))
+Sample Output 4:
+
+Beegeek
+BeeGeek
+
+"""
+import re
+class CaseHelper:
+    @staticmethod
+    def is_snake(string: str) -> bool:
+        return all(l.islower() or l == '_' for l in string) and ('_' != string[0] or '_' != string[-1] or '__' not in string)
+
+    @staticmethod
+    def is_upper_camel(string: str) -> bool:
+        return string[0].isupper() and '_' not in string
+
+    @staticmethod
+    def to_snake(string: str) -> str:
+        func = lambda x: f'_{x.group().lower()}'
+        if CaseHelper.is_upper_camel(string):
+            return re.sub(r'[A-Z]', func, string)[1:]
+        return string
+
+    @staticmethod
+    def to_upper_camel(string: str) -> str:
+        func = lambda x: f'{x.group().upper()}'[-1]
+        if CaseHelper.is_snake(string):
+            return re.sub(r'(?:^[a-z]|_[a-z])', func, string)
+        return string
 
 
 
@@ -371,3 +526,16 @@ if __name__ == "__main__":
     print(Pet.first_pet().name)
     print(Pet.last_pet().name)
     print(Pet.num_of_pets())
+
+    print(StrExtension.replace_all('Python', 'Ptn', '-'))
+    print(StrExtension.replace_all('Stepik', 'stk', '#'))
+    print(StrExtension.leave_alpha('Python111'))
+    print(StrExtension.leave_alpha('__Stepik__()'))
+    print(StrExtension.remove_vowels('Python'))
+    print(StrExtension.remove_vowels('Stepik'))
+
+    print(CaseHelper.to_snake('Beegeek'))
+    print(CaseHelper.to_snake('BeeGeek'))
+
+    print(CaseHelper.to_upper_camel('beegeek'))
+    print(CaseHelper.to_upper_camel('bee_geek'))
