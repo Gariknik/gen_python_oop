@@ -325,6 +325,139 @@ class Filter:
     def __call__(self, iterable):
         return list(filter(self.predicate, iterable))
 
+
+#7
+"""
+
+Класс DateFormatter
+Нередко в разных странах используются разные форматы дат. Рассмотрим часть из них:
+
+код страны	формат даты
+ru	DD.MM.YYYY
+us	MM-DD-YYYY
+ca	YYYY-MM-DD
+br	DD/MM/YYYY
+fr	DD.MM.YYYY
+pt	DD-MM-YYYY
+Реализуйте класс DateFormatter, экземпляры которого позволяют преобразовывать даты в формат определенной страны из таблицы выше. При создании экземпляра класс должен принимать один аргумент:
+
+country_code — код страны
+Экземпляр класса DateFormatter должен являться вызываемым объектом и принимать один аргумент:
+
+d — дата (тип date)
+Экземпляр класса DateFormatter должен возвращать строку с датой d в формате страны с кодом country_code.
+
+Примечание 1. Дополнительная проверка данных на корректность не требуется. Гарантируется, что реализованный класс используется только с корректными данными.
+
+Примечание 2. Никаких ограничений касательно реализации класса DateFormatter нет, она может быть произвольной.
+
+Примечание 3. Тестовые данные доступны по ссылкам:
+
+Архив с тестами
+GitHub
+Sample Input 1:
+
+ru_format = DateFormatter('ru')
+
+print(ru_format(date(2022, 11, 7)))
+Sample Output 1:
+
+07.11.2022
+Sample Input 2:
+
+us_format = DateFormatter('us')
+
+print(us_format(date(2022, 11, 7)))
+Sample Output 2:
+
+11-07-2022
+Sample Input 3:
+
+ca_format = DateFormatter('ca')
+
+print(ca_format(date(2022, 11, 7)))
+Sample Output 3:
+
+2022-11-07
+
+"""
+
+from datetime import datetime as date
+class DateFormatter:
+    def __init__(self, country_code):
+        self.country_code = country_code
+
+    def __call__(self, date):
+        match self.country_code:
+            case 'ru' | 'fr':
+                return date.strftime("%d.%m.%Y")
+            case 'us':
+                return date.strftime("%m-%d-%Y")
+            case 'ca':
+                return date.strftime("%Y-%m-%d")
+            case 'br':
+                return date.strftime("%d/%m/%Y")
+            case 'pt':
+                return date.strftime("%d-%m-%Y")
+            case _ :
+                return date
+
+#8
+"""
+
+Декоратор @CountCalls
+Реализуйте декоратор @CountCalls, который считает количество вызовов декорируемой функции. Счетчик вызовов должен быть доступен по атрибуту calls.
+
+Примечание 1. Не забывайте про то, что декоратор не должен поглощать возвращаемое значение декорируемой функции, а также должен уметь декорировать функции с произвольным количеством позиционных и именованных аргументов.
+
+Примечание 2. В тестирующую систему сдайте программу, содержащую только необходимый декоратор @CountCalls, но не код, вызывающий его.
+
+Примечание 3. Тестовые данные доступны по ссылкам:
+
+Архив с тестами
+GitHub
+Sample Input 1:
+
+@CountCalls
+def add(a, b):
+    return a + b
+    
+print(add(1, 2))
+print(add(2, 3))
+print(add.calls)
+Sample Output 1:
+
+3
+5
+2
+Sample Input 2:
+
+@CountCalls
+def square(a):
+    return a ** 2
+    
+for i in range(100):
+    square(i)
+    
+print(square.calls)
+Sample Output 2:
+
+100
+
+"""
+
+class CountCalls:
+    def __init__(self, func):
+        self.func = func
+        self.calls = 0
+
+    def __call__(self, *args, **kwargs):
+        self.calls += 1
+        return self.func(*args, **kwargs)
+
+
+
+
 if __name__ == '__main__':
     calculator = Calculator()
 
@@ -360,3 +493,25 @@ if __name__ == '__main__':
     numbers = [1, 2, 3, 4, 5, 6]
 
     print(leave_even(numbers))
+
+    ru_format = DateFormatter('ru')
+
+    print(ru_format(date(2022, 11, 7)))
+
+    us_format = DateFormatter('us')
+
+    print(us_format(date(2022, 11, 7)))
+
+    ca_format = DateFormatter('ca')
+
+    print(ca_format(date(2022, 11, 7)))
+
+
+    @CountCalls
+    def add(a, b):
+        return a + b
+
+
+    print(add(1, 2))
+    print(add(2, 3))
+    print(add.calls)
