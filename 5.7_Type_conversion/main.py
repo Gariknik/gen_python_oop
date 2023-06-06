@@ -307,25 +307,64 @@ False
 True
 
 """
+from functools import total_ordering
 
+@total_ordering
 class RomanNumeral:
+
     def __init__(self, number: str):
         self.number = number
 
+    def __repr__(self):
+        return self.number
 
+    @staticmethod
+    def int_to_roman(number):
+        int_roman = {1: 'I', 4: 'IV', 5: 'V', 9: 'IX', 
+                     10: 'X', 40: 'XL', 50: 'L', 90: 'XC', 
+                     100: 'C', 400: 'CD',  500: 'D', 900: 'CM', 1000: 'M'}
+        result = ''
+        for n in (1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1):
+            while n <= number:
+                result += int_roman[n]
+                number -= n
+        return result
+     
+    @staticmethod
+    def roman_to_int(number):
+        roman_int = {'I': 1, 'V': 5, 'X': 10, 'L': 50, 'C': 100, 'D': 500, 'M': 1000}
+        summ = 0
+        for i in range(len(number) - 1, -1, -1):
+            num = roman_int[number[i]]
+            if 3*num < summ: 
+                summ -= num
+            else: 
+                summ += num
+        return summ
 
+    def __int__(self):
+        return self.roman_to_int(self.number)
+    
+    def __eq__(self, other):
+        if isinstance(other, RomanNumeral):
+            return int(self) == int(other)
+        return NotImplemented
+    
+    def __lt__(self, other):
+        if isinstance(other, RomanNumeral):
+            return int(self) < int(other)
+        return NotImplemented
+    
+    def __add__(self, other):
+        if isinstance(other, RomanNumeral):
+            return RomanNumeral(self.int_to_roman(int(self) + int(other)))
+        return NotImplemented
 
-def parse_json(data):
-    match data:
-        case {'access': True, 'data': [_, {'login': str(login), 'email': str(email)}, _, _]}:
-            return (login, email)
-
-        case {'id': ids, 'data': [_, {'login': login}, _, _]}:
-            return ids, login
-
-    return None
-
-
+    def __sub__(self, other):
+        if isinstance(other, RomanNumeral):
+            return RomanNumeral(self.int_to_roman(int(self) - int(other)))
+        return NotImplemented
+    
 
 
 
@@ -348,7 +387,10 @@ if __name__ == '__main__':
     print(float(t))
     print(t.to_fahrenheit())
 
-    json_data = {'id': 2, 'access': True, 'data': ['26.05.2023', {'login': '1234', 'email': 'xxx@mail.com'}, 2000, 56.4]}
 
 
-    print(parse_json(json_data))
+
+    number = RomanNumeral('MXL') + RomanNumeral('MCDVIII') - RomanNumeral('I')
+
+    print(number)
+    print(int(number))
