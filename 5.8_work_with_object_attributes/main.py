@@ -131,6 +131,167 @@ class Logger:
 
 
 
+#3
+"""
+
+Класс Ord
+Реализуйте класс Ord. При создании экземпляра класс не должен принимать никаких аргументов.
+
+Экземпляр класса Ord должен выступать в качестве альтернативы функции ord(). При обращении к атрибуту экземпляра, именем которого является одиночный символ, должна возвращаться его позиция в таблице символов Unicode.
+
+Примечание 1. Дополнительная проверка данных на корректность не требуется. Гарантируется, что реализованный класс используется только с корректными данными.
+
+Примечание 2. Никаких ограничений касательно реализации класса Ord нет, она может быть произвольной.
+
+Примечание 3. Тестовые данные доступны по ссылкам:
+
+Архив с тестами
+GitHub
+Sample Input 1:
+
+obj = Ord()
+
+print(obj.a)
+print(obj.b)
+Sample Output 1:
+
+97
+98
+Sample Input 2:
+
+obj = Ord()
+
+print(obj.в)
+print(obj.г)
+Sample Output 2:
+
+1074
+1075
+
+"""
+
+class Ord:
+    def __getattr__(self, attr):
+        return ord(attr)
+
+
+#4
+"""
+
+Класс DefaultObject
+Реализуйте класс DefaultObject. При создании экземпляра класс должен принимать один именованный аргумент default, имеющий значение по умолчанию None, а после произвольное количество именованных аргументов. Аргументы, передаваемые после default, должны устанавливаться создаваемому экземпляру в качестве атрибутов.
+
+При обращении к несуществующему атрибуту экземпляра класса DefaultObject должно возвращаться значение default.
+
+Примечание 1. Дополнительная проверка данных на корректность не требуется. Гарантируется, что реализованный класс используется только с корректными данными.
+
+Примечание 2. Никаких ограничений касательно реализации класса DefaultObject нет, она может быть произвольной.
+
+Примечание 3. Тестовые данные доступны по ссылкам:
+
+Архив с тестами
+GitHub
+Sample Input 1:
+
+god = DefaultObject(name='Ares', mythology='greek')
+
+print(god.name)
+print(god.mythology)
+print(god.age)
+Sample Output 1:
+
+Ares
+greek
+None
+Sample Input 2:
+
+god = DefaultObject(default=0, name='Tyr', mythology='scandinavian')
+
+print(god.name)
+print(god.mythology)
+print(god.age)
+Sample Output 2:
+
+Tyr
+scandinavian
+0
+
+"""
+
+
+
+class DefaultObject:
+    def __init__(self, default=None, **kwargs):
+        self.default = default
+        for key, value in kwargs.items():
+            setattr(self, key, value)
+
+    def __getattribute__(self, attr):
+        return super().__getattribute__(attr)
+
+    def __getattr__(self, attr):
+        return self.default
+
+
+
+ #5
+"""
+ 
+ Класс NonNegativeObject
+Реализуйте класс NonNegativeObject. При создании экземпляра класс должен принимать произвольное количество именованных аргументов. Все передаваемые аргументы должны устанавливаться создаваемому экземпляру в качестве атрибутов, причем если значением атрибута является отрицательное число, оно должно быть взято с противоположным знаком.
+
+Примечание 1. Числами будем считать экземпляры классов int и float.
+
+Примечание 2. Дополнительная проверка данных на корректность не требуется. Гарантируется, что реализованный класс используется только с корректными данными.
+
+Примечание 3. Никаких ограничений касательно реализации класса NonNegativeObject нет, она может быть произвольной.
+
+Примечание 4. Тестовые данные доступны по ссылкам:
+
+Архив с тестами
+GitHub
+Sample Input 1:
+
+point = NonNegativeObject(x=1, y=-2, z=0, color='black')
+
+print(point.x)
+print(point.y)
+print(point.z)
+print(point.color)
+Sample Output 1:
+
+1
+2
+0
+black
+Sample Input 2:
+
+point = NonNegativeObject(x=1.5, y=-2.3, z=0.0, color='yellow')
+
+print(point.x)
+print(point.y)
+print(point.z)
+print(point.color)
+Sample Output 2:
+
+1.5
+2.3
+0.0
+yellow
+ 
+"""   
+
+class NonNegativeObject:
+    def __init__(self, **kwargs):
+        for key, value in kwargs.items():
+            setattr(self, key, value)
+
+    def __setattr__(self, key, value):
+        if type(value) in (int, float) and value < 0:
+            value = value * (-1)
+        super().__setattr__(key, value)
+
+
 
 if __name__ == '__main__':
 
@@ -149,3 +310,21 @@ if __name__ == '__main__':
     obj.ceo = 'Timur'
     del obj.rating
     obj.rating = '6*'
+
+    obj = Ord()
+
+    print(obj.a)
+    print(obj.b)
+
+    god = DefaultObject(name='Ares', mythology='greek')
+    print(god.name)
+    print(god.mythology)
+    print(god.age)
+
+
+    point = NonNegativeObject(x=1, y=-2, z=0, color='black')
+
+    print(point.x)
+    print(point.y)
+    print(point.z)
+    print(point.color)
