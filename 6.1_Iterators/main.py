@@ -148,22 +148,166 @@ class DevelopmentTeam:
         yield from sorted(self.LIST_EMPLOYEES, key=lambda x: x[1])
 
 
+#3
+"""
+
+Класс AttrsIterator
+Реализуйте класс AttrsIterator. При создании экземпляра класс должен принимать один аргумент:
+
+obj — произвольный объект
+Экземпляр класса AttrsIterator должен являться итератором, который генерирует все атрибуты объекта obj в виде кортежей из двух элементов, первый из которых представляет имя атрибута, второй — значение атрибута.
+
+Примечание 1. Порядок атрибутов при генерации должен совпадать с их порядком в словаре атрибутов __dict__.
+
+Примечание 2. Дополнительная проверка данных на корректность не требуется. Гарантируется, что реализованный класс используется только с корректными данными.
+
+Примечание 3. Класс AttrsIterator должен удовлетворять протоколу итератора, то есть иметь методы __iter__() и __next__(). Реализация же протокола может быть произвольной.
+
+Примечание 4. Тестовые данные доступны по ссылкам:
+
+Архив с тестами
+GitHub
+Sample Input:
+
+class User:
+    def __init__(self, name, surname, age):
+        self.name = name
+        self.surname = surname
+        self.age = age
+        
+user = User('Debbie', 'Harry', 77)
+attrsiterator = AttrsIterator(user)
+
+print(*attrsiterator)
+Sample Output:
+
+('name', 'Debbie') ('surname', 'Harry') ('age', 77)
+
+"""
+
+class AttrsIterator:
+    def __init__(self, obj) -> None:
+        self.iterator = iter(obj.__dict__.items())
+    
+    def __iter__(self):
+        return self.iterator
+
+    def __next__(self):
+        if not self.iterator:
+            raise StopIteration
+        return next(self.iterator)
+    
+# class AttrsIterator:
+#     def __init__(self, obj) -> None:
+#         self.iterator = iter(obj.__dict__.items())
+    
+#     def __iter__(self):
+#         return self
+
+#     def __next__(self):
+#         return next(self.iterator)
+
+
+#4
+"""
+
+Класс SkipIterator
+Реализуйте класс SkipIterator. При создании экземпляра класс должен принимать два аргумента в следующем порядке:
+
+iterable — итерируемый объект
+n — целое неотрицательное число
+Экземпляр класса SkipIterator должен являться итератором, который генерирует элементы итерируемого объекта iterable, пропуская по n элементов, а затем возбуждает исключение StopIteration.
+
+Примечание 1. Дополнительная проверка данных на корректность не требуется. Гарантируется, что реализованный класс используется только с корректными данными.
+
+Примечание 2. Класс SkipIterator должен удовлетворять протоколу итератора, то есть иметь методы __iter__() и __next__(). Реализация же протокола может быть произвольной.
+
+Примечание 3. Тестовые данные доступны по ссылкам:
+
+Архив с тестами
+GitHub
+Sample Input 1:
+
+skipiterator = SkipIterator([1, 2, 3, 4, 5, 6, 7, 8, 9, 10], 1)   # пропускаем по одному элементу
+
+print(*skipiterator)
+Sample Output 1:
+
+1 3 5 7 9
+Sample Input 2:
+
+skipiterator = SkipIterator([1, 2, 3, 4, 5, 6, 7, 8, 9, 10], 2)   # пропускаем по два элемента
+
+print(*skipiterator)
+Sample Output 2:
+
+1 4 7 10
+Sample Input 3:
+
+skipiterator = SkipIterator([1, 2, 3, 4, 5, 6, 7, 8, 9, 10], 0)   # не пропускаем элементы
+
+print(*skipiterator)
+Sample Output 3:
+
+1 2 3 4 5 6 7 8 9 10
+
+"""
+
+class SkipIterator:
+    def __init__(self, iterable, n) -> None:
+        self.iterable = iter(iterable)
+        self.n = n
+        self.flag = True
+
+    def __iter__(self):
+        return self
+    
+    def __next__(self):
+        if self.flag:
+            self.flag = False
+            return next(self.iterable)
+        for _ in range(self.n):
+            next(self.iterable)
+        return next(self.iterable)
+
+        
+    
+
+
 if __name__ == '__main__':
-    point = Point(1, 2, 3)
+    # point = Point(1, 2, 3)
 
-    print(list(point))
+    # print(list(point))
 
-    beegeek = DevelopmentTeam()
+    # beegeek = DevelopmentTeam()
 
-    beegeek.add_junior('Timur')
-    beegeek.add_junior('Arthur', 'Valery')
-    beegeek.add_senior('Gvido')
-    print(*beegeek, sep='\n')
+    # beegeek.add_junior('Timur')
+    # beegeek.add_junior('Arthur', 'Valery')
+    # beegeek.add_senior('Gvido')
+    # print(*beegeek, sep='\n')
 
 
-    smart_monkey = DevelopmentTeam()
+    # smart_monkey = DevelopmentTeam()
 
-    smart_monkey.add_senior('Gvido', 'Alan')
-    smart_monkey.add_junior('Denis')
+    # smart_monkey.add_senior('Gvido', 'Alan')
+    # smart_monkey.add_junior('Denis')
 
-    print(list(smart_monkey))
+    # print(list(smart_monkey))
+
+    # class Kemal:
+    #     def __init__(self):
+    #         self.family = 'cats'
+    #         self.breed = 'british'
+    #         self.master = 'Kemal'
+
+
+    # kemal = Kemal()
+    # attrs_iterator = AttrsIterator(kemal)
+
+    # print(next(attrs_iterator))
+    # print(next(attrs_iterator))
+    # print(next(attrs_iterator))
+
+    skipiterator = SkipIterator([1, 2, 3, 4, 5, 6, 7, 8, 9, 10], 1)   # пропускаем по одному элементу
+
+    print(*skipiterator)
