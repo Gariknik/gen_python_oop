@@ -270,8 +270,59 @@ class SkipIterator:
             next(self.iterable)
         return next(self.iterable)
 
-        
+#5
+"""
+Класс RandomLooper
+Реализуйте класс RandomLooper. При создании экземпляра класс должен принимать произвольное количество позиционных аргументов, каждый из которых является итерируемым объектом.
+
+Экземпляр класса RandomLooper должен являться итератором, который генерирует в случайном порядке все элементы всех итерируемых объектов, переданных в конструктор, а затем возбуждает исключение StopIteration.
+
+Примечание 1. Порядок элементов в возвращаемом итераторе необязательно должен совпадать с их порядком в тестовых данных.
+
+Примечание 2. Дополнительная проверка данных на корректность не требуется. Гарантируется, что реализованный класс используется только с корректными данными.
+
+Примечание 3. Класс RandomLooper должен удовлетворять протоколу итератора, то есть иметь методы __iter__() и __next__(). Реализация же протокола может быть произвольной.
+
+Примечание 4. Тестовые данные доступны по ссылкам:
+
+Архив с тестами
+GitHub
+Sample Input 1:
+
+randomlooper = RandomLooper(['red', 'blue', 'green', 'purple'])
+
+print(list(randomlooper))
+print(list(randomlooper))
+Sample Output 1:
+
+['green', 'red', 'blue', 'purple']
+[]
+Sample Input 2:
+
+colors = ['red', 'blue', 'green', 'purple']
+shapes = ['square', 'circle', 'triangle', 'octagon']
+randomlooper = RandomLooper(colors, shapes)
+
+print(list(randomlooper))
+Sample Output 2:
+
+['circle', 'red', 'purple', 'octagon', 'triangle', 'green', 'blue', 'square']
+
+
+"""
+from random import shuffle
+class RandomLooper:
+    def __init__(self, *args):
+        self.main_list = sum((it for it in args), [])
+        shuffle(self.main_list)
+        self.main_list = (it for it in self.main_list)
     
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        return next(self.main_list)
+
 
 
 if __name__ == '__main__':
@@ -308,6 +359,11 @@ if __name__ == '__main__':
     # print(next(attrs_iterator))
     # print(next(attrs_iterator))
 
-    skipiterator = SkipIterator([1, 2, 3, 4, 5, 6, 7, 8, 9, 10], 1)   # пропускаем по одному элементу
+    # skipiterator = SkipIterator([1, 2, 3, 4, 5, 6, 7, 8, 9, 10], 1)   # пропускаем по одному элементу
 
-    print(*skipiterator)
+    # print(*skipiterator)
+
+    randomlooper = RandomLooper(['red', 'blue', 'green', 'purple'])
+
+    print(list(randomlooper))
+    print(list(randomlooper))
