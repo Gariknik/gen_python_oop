@@ -149,8 +149,254 @@ class SparseArray:
                 self.lst += [self.default]
         self.lst[key] = value
 
+#3
+"""
+
+Класс CyclicList
+Реализуйте класс CyclicList, описывающий циклический список. При создании экземпляра класс должен принимать один аргумент:
+
+iterable — итерируемый объект, определяющий начальный набор элементов циклического списка. Если не передан, начальный набор элементов считается пустым
+Класс CyclicList должен иметь два метода экземпляра:
+
+append() — метод, принимающий в качестве аргумента произвольный объект и добавляющий его в конец циклического списка
+pop() — метод, который принимает в качестве аргумента индекс элемента циклического списка, возвращает его значение и удаляет из циклического списка элемент с данным индексом. Если аргумент не передан, возвращаемым и удаляемым элементом считается последний элемент циклического списка 
+При передаче экземпляра класса CyclicList в функцию len() должно возвращаться количество элементов в нем.
+
+Также экземпляр класса CyclicList должен быть зацикленным итерируемым объектом. Другими словами, итерация по нему должна происходить бесконечно, и при каждом достижении его последнего элемента она должна начинаться сначала.
+
+Наконец, экземпляр класса CyclicList должен позволять получать значения своих элементов с помощью индексов, при этом индексы должны работать циклически. Например, в циклическом списке [1, 2, 3] элементом с индексом 4 должно являться число 2.
+
+Примечание 1. Гарантируется, что при доступе к элементам используются только неотрицательные индексы.
+
+Примечание 2. Экземпляр класса CyclicList не должен зависеть от итерируемого объекта, на основе которого он был создан. Другими словами, если исходный итерируемый объект изменится, то экземпляр класса CyclicList измениться  не должен.
+
+Примечание 3. Дополнительная проверка данных на корректность не требуется. Гарантируется, что реализованный класс используется только с корректными данными.
+
+Примечание 4. Никаких ограничений касательно реализации класса CyclicList нет, она может быть произвольной.
+
+Примечание 5. Тестовые данные доступны по ссылкам:
+
+Архив с тестами
+GitHub
+Sample Input 1:
+
+cyclic_list = CyclicList([1, 2, 3])
+
+for index, elem in enumerate(cyclic_list):
+    if index > 6:
+        break
+    print(elem, end=' ')
+Sample Output 1:
+
+1 2 3 1 2 3 1
+Sample Input 2:
+
+cyclic_list = CyclicList([1, 2, 3])
+
+cyclic_list.append(4)
+print(cyclic_list.pop())
+print(len(cyclic_list))
+print(cyclic_list.pop(0))
+print(len(cyclic_list))
+Sample Output 2:
+
+4
+3
+1
+2
+
+"""
+
+class CyclicList:
+    def __init__(self, iterable=None):
+        if iterable is None:
+            self.iterable = []
+        self.iterable = list(iterable)
+
+    def __len__(self):
+        return len(self.iterable)
+    
+    def __getitem__(self, key):
+        return self.iterable[key % len(self)]
+    
+    def append(self, *args):
+        self.iterable += list(args)
+
+    def pop(self, key=-1):
+        return self.iterable.pop(key % len(self))
+
+        
+
+#4
+
+"""
+
+Класс SequenceZip
+Реализуйте класс SequenceZip. При создании экземпляра класс должен принимать произвольное количество позиционных аргументов, каждый из которых является итерируемым объектом. Класс SequenceZip должен описывать последовательность, элементами которой являются элементы переданных в конструктор итерируемых объектов, объединенные в кортежи. Объединение должно происходить аналогично тому, как это делает функция zip().
+
+При передаче экземпляра класса SequenceZip в функцию len() должно возвращаться количество элементов в нем.
+
+Также экземпляр класса SequenceZip должен быть итерируемым объектом, то есть позволять перебирать свои элементы, например, с помощью цикла for.
+
+Наконец, экземпляр класса SequenceZip должен позволять получать значения своих элементов с помощью индексов.
+
+Примечание 1. Гарантируется, что при доступе к элементам используются только неотрицательные индексы.
+
+Примечание 2. Экземпляр класса SequenceZip не должен зависеть от итерируемых объектов, на основе которых он был создан. Другими словами, если исходные итерируемые объекты изменятся, то экземпляр класса SequenceZip измениться  не должен.
+
+Примечание 3. Дополнительная проверка данных на корректность не требуется. Гарантируется, что реализованный класс используется только с корректными данными.
+
+Примечание 4. Никаких ограничений касательно реализации класса SequenceZip нет, она может быть произвольной.
+
+Примечание 5. Тестовые данные доступны по ссылкам:
+
+Архив с тестами
+GitHub
+Sample Input 1:
+
+sequencezip = SequenceZip('ABC', ['bee', 'geek', 'python'], [1, 2, 3])
+
+print(list(sequencezip))
+print(tuple(sequencezip))
+Sample Output 1:
+
+[('A', 'bee', 1), ('B', 'geek', 2), ('C', 'python', 3)]
+(('A', 'bee', 1), ('B', 'geek', 2), ('C', 'python', 3))
+Sample Input 2:
+
+sequencezip = SequenceZip('ABC', ['bee', 'geek', 'python'], [1, 2, 3])
+
+print(len(sequencezip))
+print(sequencezip[1])
+print(sequencezip[2])
+Sample Output 2:
+
+3
+('B', 'geek', 2)
+('C', 'python', 3)
+
+""" 
+from copy import deepcopy
+class SequenceZip:
+    def __init__(self, *args):
+        self.iterables = deepcopy(tuple(args))
+
+    def __len__(self):
+        if list(self.iterables):
+            return min(len(i) for i in self.iterables)
+        return 0
+    
+    def __iter__(self):
+        yield from zip(*self.iterables)
+    
+    def __getitem__(self, key):
+        for index, it in enumerate(self):
+            if key == index:
+                return tuple(it)
 
 
+#5
+"""
+
+​​​​​Класс OrderedSet
+Реализуйте класс OrderedSet, описывающий упорядоченное множество. При создании экземпляра класс должен принимать один аргумент:
+
+iterable — итерируемый объект, определяющий начальный набор элементов упорядоченного множества. Если не передан, начальный набор элементов считается пустым
+Класс OrderedSet должен иметь два метода экземпляра:
+
+add() — метод, принимающий в качестве аргумента произвольный объект и добавляющий его в конец упорядоченного множества
+discard() — метод, принимающий в качестве аргумента произвольный объект и удаляющий его из упорядоченного множества, если он в нем присутствует
+При передаче экземпляра класса OrderedSet в функцию len() должно возвращаться количество элементов в нем.
+
+Помимо этого, экземпляр класса OrderedSet должен быть итерируемым объектом, то есть позволять перебирать свои элементы, например, с помощью цикла for.
+
+Также экземпляр класса OrderedSet должен поддерживать операцию проверки на принадлежность с помощью оператора in.
+
+Наконец, экземпляры класса OrderedSet должны поддерживать операции сравнения с помощью операторов == и !=. Методы, реализующие операции сравнения, должны уметь сравнивать как два экземпляра класса OrderedSet между собой, так и экземпляр класса OrderedSet с экземпляром класса set. Если упорядоченное множество сравнивается с упорядоченным множеством, они считаются равными в том случае, если они имеют равную длину и содержат равные элементы на равных позициях. Если упорядоченное множество сравнивается с обычным множеством, они считаются равными в том случае, если имеют равную длину и содержат равные элементы без учета их расположения.
+
+Примечание 1. Экземпляр класса OrderedSet не должен зависеть от итерируемого объекта, на основе которого он был создан. Другими словами, если исходный итерируемый объект изменится, то экземпляр класса OrderedSet измениться  не должен.
+
+Примечание 2. Если объект, с которыми происходит сравнение, некорректен, метод, реализующий операцию сравнения, должен вернуть константу NotImplemented.
+
+Примечание 3. Дополнительная проверка данных на корректность не требуется. Гарантируется, что реализованный класс используется только с корректными данными.
+
+Примечание 4. Никаких ограничений касательно реализации класса OrderedSet нет, она может быть произвольной.
+
+Примечание 5. Тестовые данные доступны по ссылкам:
+
+Архив с тестами
+GitHub
+Sample Input 1:
+
+orderedset = OrderedSet(['bee', 'python', 'stepik', 'bee', 'geek', 'python', 'bee'])
+
+print(*orderedset)
+print(len(orderedset))
+Sample Output 1:
+
+bee python stepik geek
+4
+Sample Input 2:
+
+orderedset = OrderedSet(['bee', 'python', 'stepik', 'bee', 'geek', 'python', 'bee'])
+
+print('python' in orderedset)
+print('C++' in orderedset)
+Sample Output 2:
+
+True
+False
+Sample Input 3:
+
+orderedset = OrderedSet()
+
+orderedset.add('green')
+orderedset.add('green')
+orderedset.add('blue')
+orderedset.add('red')
+print(*orderedset)
+orderedset.discard('blue')
+orderedset.discard('white')
+print(*orderedset)
+Sample Output 3:
+
+green blue red
+green red
+
+"""
+
+class OrderedSet:
+    def __init__(self, iterable=None):
+        if iterable is None:
+            self.iterable = dict()
+        else:
+            self.iterable = dict((it, it) for it in iterable)
+
+    def __repr__(self):
+        return f'{tuple(self.iterable.keys())}'
+    
+    def add(self, obj):
+        self.iterable |= {obj: obj}
+
+    def discard(self, obj):
+        if obj in self.iterable:
+            self.iterable.pop(obj)
+
+    def __len__(self):
+        return len(self.iterable)
+    
+    def __eq__(self, other):
+        if isinstance(other, OrderedSet):
+            return len(self) == len(other) and all(s == o for s, o in zip(self.iterable.keys(), other.iterable.keys()))
+        if isinstance(other, set):
+            return len(self) == len(other) and set(self.iterable.keys()) == other
+        return NotImplemented
+    
+    def __iter__(self):
+        yield from self.iterable.keys()
+
+    def __contains__(self, item):
+        return item in self.iterable
 
 if __name__ == '__main__':
     numbers = [1, 2, 3, 4, 5]
@@ -169,3 +415,15 @@ if __name__ == '__main__':
     print(array[5])
     print(array[12])
     print(array[13])
+
+    print('##################')
+
+    sequencezip = SequenceZip()
+    print(len(sequencezip))
+    print(list(sequencezip))
+
+    print(OrderedSet(['green', 'red', 'blue']) == OrderedSet(['green', 'red', 'blue']))
+    print(OrderedSet(['green', 'red', 'blue']) == OrderedSet(['red', 'blue', 'green']))
+    print(OrderedSet(['green', 'red', 'blue']) == {'blue', 'red', 'green'})
+    print(OrderedSet(['green', 'red', 'blue']) == ['green', 'red', 'blue'])
+    print(OrderedSet(['green', 'red', 'blue']) == 100)
