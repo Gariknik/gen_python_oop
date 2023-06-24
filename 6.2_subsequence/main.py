@@ -277,6 +277,7 @@ Sample Output 2:
 
 """ 
 from copy import deepcopy
+from typing import Any
 class SequenceZip:
     def __init__(self, *args):
         self.iterables = deepcopy(tuple(args))
@@ -371,9 +372,6 @@ class OrderedSet:
             self.iterable = dict()
         else:
             self.iterable = dict((it, it) for it in iterable)
-
-    def __repr__(self):
-        return f'{tuple(self.iterable.keys())}'
     
     def add(self, obj):
         self.iterable |= {obj: obj}
@@ -398,32 +396,129 @@ class OrderedSet:
     def __contains__(self, item):
         return item in self.iterable
 
+
+#6
+"""
+
+Класс AttrDict
+Реализуйте класс AttrDict, описывающий упрощенный словарь, значения элементов которого можно получать как по ключам ([key]), так и по одноименным атрибутам (.key). При создании экземпляра класс должен принимать один аргумент:
+
+data — словарь, определяющий начальный набор элементов упрощенного словаря. Если не передан, начальный набор элементов считается пустым
+При передаче экземпляра класса AttrDict в функцию len() должно возвращаться количество элементов в нем.
+
+Также экземпляр класса AttrDict должен быть итерируемым объектом, то есть позволять перебирать свои ключи, например, с помощью цикла for.
+
+Наконец, экземпляр класса AttrDict должен позволять получать значения своих элементов как по их ключам, так и по одноименным атрибутам. Реализовывать добавление элементов и изменение их значений по одноименным атрибутам не нужно.
+
+Примечание 1. Экземпляр класса AttrDict не должен зависеть от словаря, на основе которого он был создан. Другими словами, если исходный словарь изменится, то экземпляр класса AttrDict измениться  не должен.
+
+Примечание 2. Дополнительная проверка данных на корректность не требуется. Гарантируется, что реализованный класс используется только с корректными данными.
+
+Примечание 3. Никаких ограничений касательно реализации класса AttrDict нет, она может быть произвольной.
+
+Примечание 4. Тестовые данные доступны по ссылкам:
+
+Архив с тестами
+GitHub
+Sample Input 1:
+
+attrdict = AttrDict({'name': 'X Æ A-12', 'father': 'Elon Musk'})
+
+print(attrdict['name'])
+print(attrdict.father)
+print(len(attrdict))
+Sample Output 1:
+
+X Æ A-12
+Elon Musk
+2
+Sample Input 2:
+
+attrdict = AttrDict({'name': 'Timur', 'city': 'Moscow'})
+
+attrdict['city'] = 'Dubai'
+attrdict['age'] = 31
+print(attrdict.city)
+print(attrdict.age)
+Sample Output 2:
+
+Dubai
+31
+Sample Input 3:
+
+attrdict = AttrDict()
+
+attrdict['school_name'] = 'BEEGEEK'
+print(attrdict['school_name'])
+print(attrdict.school_name)
+Sample Output 3:
+
+BEEGEEK
+BEEGEEK
+
+"""
+
+import copy
+class AttrDict:
+    def __init__(self, data={}):
+        self.dict = copy.deepcopy(data)
+
+    def __len__(self):
+        return len(self.dict)
+    
+    def __getattr__(self, attr):
+        if attr in self.dict:
+            return self.dict[attr]
+        raise KeyError
+    
+    def __setattr__(self, attr, value) -> None:
+        object.__setattr__(self, attr, value)
+           
+    def __getitem__(self, key):
+        return self.dict[key]
+    
+    def __setitem__(self, key, value):
+        self.dict[key] = value
+    
+    def __iter__(self):
+        yield from (key for key in self.dict.keys())
+    
+
+
 if __name__ == '__main__':
-    numbers = [1, 2, 3, 4, 5]
-    reversed_numbers = ReversedSequence(numbers)
+    # numbers = [1, 2, 3, 4, 5]
+    # reversed_numbers = ReversedSequence(numbers)
 
-    print(reversed_numbers[0])
-    numbers.append(6)
-    print(reversed_numbers[0])
+    # print(reversed_numbers[0])
+    # numbers.append(6)
+    # print(reversed_numbers[0])
 
 
-    array = SparseArray(0)
+    # array = SparseArray(0)
 
-    array[5] = 1000
-    array[12] = 1001
+    # array[5] = 1000
+    # array[12] = 1001
 
-    print(array[5])
-    print(array[12])
-    print(array[13])
+    # print(array[5])
+    # print(array[12])
+    # print(array[13])
 
-    print('##################')
+    # print('##################')
 
-    sequencezip = SequenceZip()
-    print(len(sequencezip))
-    print(list(sequencezip))
+    # sequencezip = SequenceZip()
+    # print(len(sequencezip))
+    # print(list(sequencezip))
 
-    print(OrderedSet(['green', 'red', 'blue']) == OrderedSet(['green', 'red', 'blue']))
-    print(OrderedSet(['green', 'red', 'blue']) == OrderedSet(['red', 'blue', 'green']))
-    print(OrderedSet(['green', 'red', 'blue']) == {'blue', 'red', 'green'})
-    print(OrderedSet(['green', 'red', 'blue']) == ['green', 'red', 'blue'])
-    print(OrderedSet(['green', 'red', 'blue']) == 100)
+    # print(OrderedSet(['green', 'red', 'blue']) == OrderedSet(['green', 'red', 'blue']))
+    # print(OrderedSet(['green', 'red', 'blue']) == OrderedSet(['red', 'blue', 'green']))
+    # print(OrderedSet(['green', 'red', 'blue']) == {'blue', 'red', 'green'})
+    # print(OrderedSet(['green', 'red', 'blue']) == ['green', 'red', 'blue'])
+    # print(OrderedSet(['green', 'red', 'blue']) == 100)
+
+
+    attrdict = AttrDict({'name': 'Timur', 'city': 'Moscow'})
+
+    attrdict['city'] = 'Dubai'
+    attrdict['age'] = 31
+    print(attrdict.city)
+    print(attrdict.age)
