@@ -313,6 +313,129 @@ class Reloopable:
     def __exit__(self, *args, **kwargs):
         self.file.close()
 
+#6
+"""
+
+Класс UpperPrint
+Реализуйте класс UpperPrint. При создании экземпляра класс не должен принимать никаких аргументов.
+
+Экземпляр класса UpperPrint должен являться контекстным менеджером, который внутри блока with позволяет выполнять все операции записи в стандартный поток вывода sys.stdout в верхнем регистре.
+
+Примечание 1. Наглядные примеры использования класса UpperPrint продемонстрированы в тестовых данных.
+
+Примечание 2. Дополнительная проверка данных на корректность не требуется. Гарантируется, что реализованный класс используется только с корректными данными.
+
+Примечание 3. Класс UpperPrint должен удовлетворять протоколу контекстного менеджера, то есть иметь методы __enter__() и __exit__(). Реализация же протокола может быть произвольной.
+
+Примечание 4. Тестовые данные доступны по ссылкам:
+
+Архив с тестами
+GitHub
+Sample Input 1:
+
+print('Если жизнь одаривает вас лимонами — не делайте лимонад')
+print('Заставьте жизнь забрать их обратно!')
+
+with UpperPrint():
+    print('Мне не нужны твои проклятые лимоны!')
+    print('Что мне с ними делать?')
+
+print('Требуйте встречи с менеджером, отвечающим за жизнь!')
+Sample Output 1:
+
+Если жизнь одаривает вас лимонами — не делайте лимонад
+Заставьте жизнь забрать их обратно!
+МНЕ НЕ НУЖНЫ ТВОИ ПРОКЛЯТЫЕ ЛИМОНЫ!
+ЧТО МНЕ С НИМИ ДЕЛАТЬ?
+Требуйте встречи с менеджером, отвечающим за жизнь!
+Sample Input 2:
+
+with UpperPrint():
+    print('Bee', 'Geek', 'Love', sep=' one ', end=' end')
+Sample Output 2:
+
+BEE ONE GEEK ONE LOVE END
+
+"""
+
+import sys
+class UpperPrint:
+    def printUpper(self, *args, **kwargs):
+        self.d(*tuple(i.upper() for i in args))
+
+
+    def __enter__(self):
+        self.d = sys.stdout.write
+        sys.stdout.write = self.printUpper
+
+    def __exit__(self, *args, **kwargs):
+        sys.stdout.write = self.d
+
+#7
+"""
+
+Класс Suppress
+Реализуйте класс Suppress. При создании экземпляра класс должен принимать произвольное количество позиционных аргументов, каждый из которых представляет собой тип исключения.
+
+Экземпляр класса Suppress должен являться контекстным менеджером, подавляющим исключение, если оно возбуждается во время выполнения кода внутри блока with. Подавляться должны исключения тех типов, которые были перечислены при создании контекстного менеджера.
+
+Также экземпляр класса Suppress должен иметь один атрибут:
+
+exception — исключение, которое было подавлено контекстным менеджером. Если исключение не было подавлено или код был выполнен без исключений, атрибут должен иметь значение None
+Примечание 1. Наглядные примеры использования класса Suppress продемонстрированы в тестовых данных.
+
+Примечание 2. Дополнительная проверка данных на корректность не требуется. Гарантируется, что реализованный класс используется только с корректными данными.
+
+Примечание 3. Класс Suppress должен удовлетворять протоколу контекстного менеджера, то есть иметь методы __enter__() и __exit__(). Реализация же протокола может быть произвольной.
+
+Примечание 4. Тестовые данные доступны по ссылкам:
+
+Архив с тестами
+GitHub
+Sample Input 1:
+
+with Suppress(NameError):
+    print('Этой переменной не существует -->', variable)
+    
+print('Завершение программы')
+Sample Output 1:
+
+Завершение программы
+Sample Input 2:
+
+with Suppress(TypeError, ValueError) as context:
+    number = int('я число')
+
+print(context.exception)
+print(type(context.exception))
+Sample Output 2:
+
+invalid literal for int() with base 10: 'я число'
+<class 'ValueError'>
+Sample Input 3:
+
+with Suppress() as context:
+    print('All success!')
+
+print(context.exception)
+Sample Output 3:
+
+All success!
+None
+
+"""
+class Suppress:
+    def __init__(self, *args):
+        self.list_exp = list(args)
+        self.exception = None
+
+    def __enter__(self):
+        return self
+    
+    def __exit__(self, exc_type, exc_value, traceback):
+        if exc_type in self.list_exp:
+            self.exception = exc_value
+        return self.exception
 
 if __name__ == "__main__":
     print('start')
@@ -356,3 +479,19 @@ if __name__ == "__main__":
             print(line.strip())
         for line in reloopable:
             print(line.strip())
+
+
+    print('Если жизнь одаривает вас лимонами — не делайте лимонад')
+    print('Заставьте жизнь забрать их обратно!')
+
+    with UpperPrint():
+        print('Мне не нужны твои проклятые лимоны!')
+        print('Что мне с ними делать?')
+
+    print('Требуйте встречи с менеджером, отвечающим за жизнь!')
+
+    with Suppress(TypeError, ValueError) as context:
+        number = int('я число')
+
+    print(context.exception)
+    print(type(context.exception))
