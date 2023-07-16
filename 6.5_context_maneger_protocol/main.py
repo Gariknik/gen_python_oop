@@ -996,12 +996,14 @@ class TreeBuilder:
     
     def __enter__(self):
         TreeBuilder.level += 1
+        
         TreeBuilder.struct += [[]]
         return self
     
     def __exit__(self, exc_type, exc_value, traceback):
         TreeBuilder.level -= 1
         TreeBuilder.index += 1
+
         TreeBuilder.struct += []
         return True
 
