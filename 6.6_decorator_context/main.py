@@ -156,18 +156,21 @@ Sample Output 2:
 """
 
 
-from contextlib import contextmanager, ExitStack
+from contextlib import contextmanager
+import sys
 
 @contextmanager
 def safe_write(filename):
-    stack = ExitStack()
-    file = stack.enter_context(open(filename, 'w'))
+    lst = []
     try:
+        file = open(filename, 'w')
         yield file
-    except Exception as e:
-        print(f'Во время записи в файл было возбуждено исключение {type(e).__name__}')  
+    except Exception as error:
+        print(f"Во время записи в файл было возбуждено исключение {type(error).__name__}")
+        
     finally:
-        stack.close()
+        if file:
+            file.close()
         
 
 
