@@ -162,7 +162,25 @@ Sample Output 4:
 
 """
 
+class NonNegativeInteger:
+    def __init__(self, name, default=None):
+        self._name_attr = name
+        self.default = default
 
+    def __get__(self, obj, cls):
+        if self._name_attr not in obj.__dict__ and self.default is None:
+            raise AttributeError('Атрибут не найден')
+        if self._name_attr in obj.__dict__:
+            return obj.__dict__[self._name_attr]
+        else:
+            obj.__dict__[self._name_attr] = self.default
+            return obj.__dict__[self._name_attr]
+
+    def __set__(self, obj, value):
+        if  type(value) != int or value < 0:
+            raise ValueError('Некорректное значение')
+        obj.__dict__[self._name_attr] = value
+            
 
 
 if __name__ == "__main__":
@@ -177,3 +195,21 @@ if __name__ == "__main__":
     for item in data:
         nonkeyworddata.obj = item
         print(nonkeyworddata.obj)
+
+
+    class Student:
+        score = NonNegativeInteger('score')
+
+    student = Student()
+    student.score = 90
+
+    print(student.score)
+
+    class Student:
+        score = NonNegativeInteger('score', 0)
+
+    student = Student()
+
+    print(student.score)
+    student.score = 0
+    print(student.score)
