@@ -352,6 +352,24 @@ Sample Output 4:
 
 """
 
+class TypeChecked:
+    def __set_name__(self, cls, attr):
+        self._attr = attr
+
+    def __init__(self, *args):
+        self.__types = tuple(args)
+
+    def __get__(self, obj, cls):
+        if self._attr not in obj.__dict__:
+            raise AttributeError ('Атрибут не найден')
+        return obj.__dict__[self._attr]      
+        
+    def __set__(self, obj, value):
+        if type(value) not in self.__types:
+            raise TypeError ('Некорректное значение')
+        obj.__dict__[self._attr] = value
+
+
 if __name__ == "__main__":
     
     class NonKeywordData:
@@ -384,17 +402,27 @@ if __name__ == "__main__":
     print(student.score)
 
 
+    # class Student:
+    #     name = LimitedTakes(3)
+
+    # student = Student()
+    # student.name = 'Gwen'
+
+    # print(student.name)
+    # print(student.name)
+    # print(student.name)
+
+    # try:
+    #     print(student.name)
+    # except MaxCallsException as e:
+    #     print(e)
+
     class Student:
-        name = LimitedTakes(3)
+        name = TypeChecked(str)
 
     student = Student()
-    student.name = 'Gwen'
-
-    print(student.name)
-    print(student.name)
-    print(student.name)
 
     try:
         print(student.name)
-    except MaxCallsException as e:
+    except AttributeError as e:
         print(e)
