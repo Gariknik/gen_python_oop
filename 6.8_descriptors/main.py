@@ -466,8 +466,75 @@ Sample Output 4:
 
 
 """
+from random import randint
+class RandomNumber:
+    def __set_name__(self, cls, attr):
+        self._attr = attr
+
+    def __init__(self, start, end, cache=False):
+        self.start = start
+        self.end = end
+        self.cache = None
+        if cache:
+            self.cache = randint(self.start, self.end)
 
 
+    def __get__(self, obj, cls):
+        if self.cache is not None:
+            return self.cache
+        return randint(self.start, self.end)
+        
+
+    def __set__(self, obj, values):
+        raise AttributeError('Изменение невозможно')
+
+
+"""
+вариант 2
+import random
+
+
+class RandomNumber:
+    def __init__(self, start, end, cache=False):
+        self.start = start
+        self.end = end
+        self.cache = cache
+
+    def __set_name__(self, cls, attr):
+        self._attr = attr
+
+    def __get__(self, obj, cls):
+        if obj is None:
+            return self
+        if self.cache and self._attr in obj.__dict__:
+            return obj.__dict__[self._attr]
+        number = random.randint(self.start, self.end)
+        if self.cache:
+            obj.__dict__[self._attr] = number
+        return number
+
+    def __set__(self, obj, value):
+        raise AttributeError('Изменение невозможно')
+
+
+вариант 3
+import random
+
+class RandomNumber:
+    def __init__(self, start, end, cache=False):
+        self.start = start
+        self.end = end
+        self.cache = cache
+        self.value = random.randint(self.start, self.end)
+        
+    def __get__(self, obj, cls):
+        if self.cache:
+            return self.value
+        return random.randint(self.start, self.end)
+        
+    def __set__(self, obj, value):
+        raise AttributeError('Изменение невозможно')
+"""
 
 
 if __name__ == "__main__":
@@ -526,3 +593,16 @@ if __name__ == "__main__":
         print(student.name)
     except AttributeError as e:
         print(e)
+
+
+    class MagicPoint:
+        x = RandomNumber(0, 5, True)
+        y = RandomNumber(0, 5)
+        z = RandomNumber(0, 5)
+
+    magicpoint = MagicPoint()
+    value = magicpoint.x
+
+    print(magicpoint.x == value)
+    print(magicpoint.x == value)
+    print(magicpoint.x == value)
