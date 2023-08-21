@@ -62,7 +62,55 @@ class Jet(AirVehicle):
     pass
 
 
+
+#2
+"""
+
+Иерархия классов 🔶
+С помощью наследования и приведенной ниже схемы постройте иерархию пустых классов, описывающих геометрические фигуры:
+
+"""
+class Shape:
+    pass
+
+class Polygon(Shape):
+    pass
+
+class Circle(Shape):
+    pass
+
+class Quadrilateral(Polygon):
+    pass
+
+
+class Triangle(Polygon):
+    pass
+
+class Parallelogram(Quadrilateral):
+    pass
+
+class IsoscelesTriangle(Triangle):
+    pass
+
+
+class EquilateralTriangle(Triangle):
+    pass
+
+class Rectangle(Quadrilateral):
+    pass
+
+class Square(Rectangle):
+    pass
+
+
+
+
 if __name__ == '__main__':
     print(issubclass(Car, LandVehicle))
     print(issubclass(Motocycle, LandVehicle))
     print(issubclass(Bicycle, LandVehicle))
+
+
+    print(issubclass(Triangle, Polygon))
+    print(issubclass(IsoscelesTriangle, Triangle))
+    print(issubclass(EquilateralTriangle, Triangle))
