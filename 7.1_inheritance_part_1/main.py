@@ -102,7 +102,66 @@ class Rectangle(Quadrilateral):
 class Square(Rectangle):
     pass
 
+#3
+"""
+Иерархия классов 🐍
+С помощью наследования и приведенной ниже схемы постройте иерархию классов, описывающих животных:
 
+
+
+Класс Animal должен иметь два метода экземпляра:
+
+sleep() — пустой метод
+eat()— пустой метод
+Класс Fish должен иметь один метод экземпляра:
+
+swim()— пустой метод
+Класс Bird должен иметь один метод экземпляра:
+
+lay_eggs()— пустой метод
+Класс FlyingBird должен иметь один метод экземпляра:
+
+fly()— пустой метод
+Примечание. Тестовые данные доступны по ссылкам:
+
+Архив с тестами
+GitHub
+Sample Input:
+
+print(issubclass(Fish, Animal))
+print(issubclass(Bird, Animal))
+print(issubclass(FlyingBird, Animal))
+print(issubclass(FlyingBird, Bird))
+Sample Output:
+
+True
+True
+True
+True
+
+
+"""
+class Animal:
+    def __init__(self):
+        pass
+
+    def sleep(self):
+        pass
+
+    def eat(self):
+        pass
+
+class Fish(Animal):
+    def swim(self):
+        pass
+
+class Bird(Animal):
+    def lay_eggs(self):
+        pass
+
+class FlyingBird(Bird):
+    def fly(self):
+        pass
 
 
 if __name__ == '__main__':
@@ -114,3 +173,9 @@ if __name__ == '__main__':
     print(issubclass(Triangle, Polygon))
     print(issubclass(IsoscelesTriangle, Triangle))
     print(issubclass(EquilateralTriangle, Triangle))
+
+
+    print(issubclass(Fish, Animal))
+    print(issubclass(Bird, Animal))
+    print(issubclass(FlyingBird, Animal))
+    print(issubclass(FlyingBird, Bird))
