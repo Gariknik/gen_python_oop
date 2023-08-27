@@ -279,10 +279,15 @@ True
 """
 
 class Validator:
-    pass
+    def __init__(self, obj):
+        self.obj = obj
+    
+    def is_valid(self):
+        pass
 
 class NumberValidator(Validator):
-    pass
+    def is_valid(self):
+        return type(self.obj) in (int, float)
 
 if __name__ == '__main__':
     print(issubclass(Car, LandVehicle))
@@ -306,3 +311,12 @@ if __name__ == '__main__':
 
     print(user.skip_ads())
     print(premium_user.skip_ads())
+
+
+    validator1 = NumberValidator('beegeek')
+    validator2 = NumberValidator(1)
+    validator3 = NumberValidator(1.1)
+
+    print(validator1.is_valid())
+    print(validator2.is_valid())
+    print(validator3.is_valid())
