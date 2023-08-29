@@ -397,6 +397,73 @@ Sample Output 4:
 10
 
 """
+class Counter:
+    def __init__(self, start=0):
+        self.start = start
+        self.value = start
+
+    def inc(self, num=None):
+        if num is None:
+            self.value += 1
+        else:
+            self.value += num
+
+    def dec(self, num=None):
+        if num is None and self.value > 0:
+            self.value -= 1
+        elif num and self.value - num >= 0:
+            self.value -= num
+        else:
+            self.value = 0
+
+class NonDecCounter(Counter):
+    def dec(self, num=None):
+        pass
+
+
+class LimitedCounter(Counter):
+    def __init__(self, start=0, limit=10):
+        self.start = start
+        self.limit = limit
+        self.value = start
+
+    def inc(self, num=None):
+        if num is None and self.value + 1 < self.limit:
+            self.value += 1
+        elif self.value + num < self.limit:
+            self.value += num
+        else:
+            self.value = self.limit
+
+
+"""
+
+class Counter:
+    def __init__(self, start=0):
+        self.value = start
+
+    def inc(self, n=1):
+        self.value += n
+
+    def dec(self, n=1):
+        self.value = max(self.value - n, 0)
+
+
+class NonDecCounter(Counter):
+    def dec(self, n=1):
+        return None
+
+
+class LimitedCounter(Counter):
+    def __init__(self, start=0, limit=10):
+        Counter.__init__(self, start)
+        self.limit = limit
+
+    def inc(self, n=1):
+        self.value = min(self.value + n, self.limit)
+
+
+"""
 
 if __name__ == '__main__':
     print(issubclass(Car, LandVehicle))
@@ -429,3 +496,19 @@ if __name__ == '__main__':
     print(validator1.is_valid())
     print(validator2.is_valid())
     print(validator3.is_valid())
+
+
+    print(issubclass(NonDecCounter, Counter))
+    print(issubclass(LimitedCounter, Counter))
+
+    counter = Counter()
+
+    print(counter.value)
+    counter.inc()
+    counter.inc(5)
+    print(counter.value)
+    counter.dec()
+    counter.dec(3)
+    print(counter.value)
+    counter.dec(10)
+    print(counter.value)
