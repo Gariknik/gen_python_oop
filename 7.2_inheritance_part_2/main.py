@@ -127,6 +127,107 @@ class GoldPlan(BasicPlan):
     has_UHD = True
     num_of_devices = 4
     price = '15.99$'
+#2
+"""
+
+Классы WeatherWarning и WeatherWarningWithDate
+Реализуйте класс WeatherWarning, описывающий объект, предупреждающий о погодных изменениях. При создании экземпляра класс не должен принимать никаких аргументов.
+
+Класс WeatherWarning должен иметь три метода экземпляра:
+
+rain() — метод, выводящий текст:
+Ожидаются сильные дожди и ливни с грозой
+snow() — метод, выводящий текст:
+Ожидается снег и усиление ветра
+low_temperature() — метод, выводящий текст:
+Ожидается сильное понижение температуры
+Также реализуйте класс WeatherWarningWithDate, наследника класса WeatherWarning, описывающий объект, предупреждающий о погодных изменениях с указанием даты. Процесс создания экземпляра класса WeatherWarningWithDate должен совпадать с процессом создания экземпляра класса WeatherWarning.
+
+Класс WeatherWarningWithDate должен иметь три метода экземпляра:
+
+rain() — метод, принимающий в качестве аргумента дату (тип date) и выводящий текст:
+<дата в формате DD.MM.YYYY>
+Ожидаются сильные дожди и ливни с грозой
+snow() — метод, принимающий в качестве аргумента дату (тип date) и выводящий текст:
+<дата в формате DD.MM.YYYY>
+Ожидается снег и усиление ветра
+low_temperature() — метод, принимающий в качестве аргумента дату (тип date) и выводящий текст:
+<дата в формате DD.MM.YYYY>
+Ожидается сильное понижение температуры
+Примечание 1. Дополнительная проверка данных на корректность не требуется. Гарантируется, что реализованный класс используется только с корректными данными.
+
+Примечание 2. Никаких ограничений касательно реализации классов нет, она может быть произвольной.
+
+Примечание 3. Тестовые данные доступны по ссылкам:
+
+Архив с тестами
+GitHub
+Sample Input 1:
+
+print(issubclass(WeatherWarningWithDate, WeatherWarning))
+Sample Output 1:
+
+True
+Sample Input 2:
+
+weatherwarning = WeatherWarning()
+
+weatherwarning.rain()
+weatherwarning.snow()
+weatherwarning.low_temperature()
+Sample Output 2:
+
+Ожидаются сильные дожди и ливни с грозой
+Ожидается снег и усиление ветра
+Ожидается сильное понижение температуры
+Sample Input 3:
+
+from datetime import date
+
+weatherwarning = WeatherWarningWithDate()
+dt = date(2022, 12, 12)
+
+weatherwarning.rain(dt)
+weatherwarning.snow(dt)
+weatherwarning.low_temperature(dt)
+Sample Output 3:
+
+12.12.2022
+Ожидаются сильные дожди и ливни с грозой
+12.12.2022
+Ожидается снег и усиление ветра
+12.12.2022
+Ожидается сильное понижение температуры
+
+"""
+from datetime import date
+
+class WeatherWarning:
+    def rain(self):
+        print('Ожидаются сильные дожди и ливни с грозой')
+    
+    def snow(self):
+        print('Ожидается снег и усиление ветра')
+    
+    def low_temperature(self):
+        print('Ожидается сильное понижение температуры')
+
+class WeatherWarningWithDate(WeatherWarning):
+    def rain(self, obj):
+        if isinstance(obj, date):
+            print(f"{obj.strftime('%d.%m.%Y')}")
+            print('Ожидаются сильные дожди и ливни с грозой')
+    
+    def snow(self, obj):
+        if isinstance(obj, date):
+            print(f"{obj.strftime('%d.%m.%Y')}")
+            print('Ожидается снег и усиление ветра')
+    
+    def low_temperature(self, obj):
+        if isinstance(obj, date):
+            print(f"{obj.strftime('%d.%m.%Y')}")
+            print("Ожидается сильное понижение температуры")
+
 
 
 if __name__ == '__main__':
@@ -137,3 +238,12 @@ if __name__ == '__main__':
     print(SilverPlan.has_UHD)
     print(SilverPlan.num_of_devices)
     print(SilverPlan.price)
+
+    from datetime import date
+
+    weatherwarning = WeatherWarningWithDate()
+    dt = date(2022, 12, 12)
+
+    weatherwarning.rain(dt)
+    weatherwarning.snow(dt)
+    weatherwarning.low_temperature(dt)
