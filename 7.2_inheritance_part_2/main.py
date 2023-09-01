@@ -230,6 +230,84 @@ class WeatherWarningWithDate(WeatherWarning):
 
 
 
+# Напишите определение класса File       
+class File:
+    def __init__(self, size):
+        self._size_in_bytes = size
+
+    @property
+    def size(self):
+        if self._size_in_bytes < 1024:
+            return f"{self._size_in_bytes} B" 
+        elif 1023 < self._size_in_bytes and self._size_in_bytes < 1048576:
+            return f"{self._size_in_bytes/1024:.2f} KB"
+        elif 1048575 < self._size_in_bytes and self._size_in_bytes < 1073741824:
+            return f"{self._size_in_bytes/1048576:.2f} MB"
+        else:
+             return f"{self._size_in_bytes/1073741824:.2f} GB"
+    @size.setter
+    def size(self, value):
+        self._size_in_bytes = value
+
+#3
+"""
+
+Классы Triangle и EquilateralTriangle
+Реализуйте класс Triangle, описывающий треугольник. При создании экземпляра класс должен принимать три аргумента в следующем порядке:
+
+a — длина стороны треугольника
+b — длина стороны треугольника
+c — длина стороны треугольника
+Класс Triangle должен иметь один метод экземпляра:
+
+perimeter() — метод, возвращающий периметр треугольника
+Также реализуйте класс EquilateralTriangle, наследника класса Triangle, описывающий равносторонний треугольник. При создании экземпляра класс должен принимать один аргумент:
+
+side — длина стороны треугольника
+Примечание 1. Дополнительная проверка данных на корректность не требуется. Гарантируется, что реализованный класс используется только с корректными данными.
+
+Примечание 2. Никаких ограничений касательно реализации классов нет, она может быть произвольной.
+
+Примечание 3. Тестовые данные доступны по ссылкам:
+
+Архив с тестами
+GitHub
+Sample Input 1:
+
+print(issubclass(EquilateralTriangle, Triangle))
+Sample Output 1:
+
+True
+Sample Input 2:
+
+triangle1 = Triangle(3, 4, 5)
+triangle2 = EquilateralTriangle(3)
+
+print(triangle1.perimeter())
+print(triangle2.perimeter())
+Sample Output 2:
+
+12
+9
+
+"""
+class Triangle:
+    def __init__(self, a, b, c):
+        self.a = a
+        self.b = b
+        self.c = c
+
+    def perimeter(self):
+        return self.a + self.b + self.c
+    
+class EquilateralTriangle(Triangle):
+    def __init__(self, a):
+        self.a = a
+
+    def perimeter(self):
+        return 3 * self.a
+
+
 if __name__ == '__main__':
     print(SilverPlan.can_stream)
     print(SilverPlan.can_download)
@@ -247,3 +325,41 @@ if __name__ == '__main__':
     weatherwarning.rain(dt)
     weatherwarning.snow(dt)
     weatherwarning.low_temperature(dt)
+
+    triangle1 = Triangle(3, 4, 5)
+    triangle2 = EquilateralTriangle(3)
+
+    print(triangle1.perimeter())
+    print(triangle2.perimeter())
+
+
+
+    # Ниже код для проверки методов класса File
+
+    file = File(5)
+    assert file.size == "5 B"
+    file.size = 1023
+
+    assert file.size == "1023 B"
+    print(file.size)
+    file.size = 1024
+    print(file.size)
+    assert file.size == "1.00 KB"
+
+    file_1 = File(1500000)
+    #assert file_1._size_in_bytes == 1500000
+    print(file_1._size_in_bytes)
+    # assert file_1.size == "1.43 MB"
+    print(file_1.size)
+
+
+    file_2 = File(1500)
+    # assert file_2.size == "1.46 KB"
+
+
+    file_3 = File(2789326322)
+    # assert file_3.size == "2.60 GB"
+    file_3.size = 1073741824
+    # assert file_3.size == "1.00 GB"
+
+    print('Good')
