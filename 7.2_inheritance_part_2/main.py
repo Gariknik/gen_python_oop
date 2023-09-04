@@ -386,6 +386,23 @@ Sample Output 3:
 
 """
 
+class Counter:
+    def __init__(self, start=0):
+        self.value = start
+
+    def inc(self, n=1):
+        self.value += n
+
+    def dec(self, n=1):
+        self.value = max(self.value - n, 0)
+
+class DoubledCounter(Counter):
+    def inc(self, n=1):
+        self.value += n*2
+
+    def dec(self, n=1):
+        self.value = max(self.value - n*2, 0)    
+
 if __name__ == '__main__':
     print(SilverPlan.can_stream)
     print(SilverPlan.can_download)
@@ -441,3 +458,15 @@ if __name__ == '__main__':
     # assert file_3.size == "1.00 GB"
 
     print('Good')
+
+    counter = DoubledCounter(20)
+
+    print(counter.value)
+    counter.inc()
+    counter.inc(5)
+    print(counter.value)
+    counter.dec()
+    counter.dec(10)
+    print(counter.value)
+    counter.dec(10)
+    print(counter.value)
