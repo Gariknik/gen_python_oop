@@ -582,7 +582,28 @@ Sample Output 3:
 36
 
 
-"""   
+"""
+class Summator:
+    def __init__(self, m=1):
+        self.m = m
+    
+    def total(self, n):
+        return sum([num ** self.m for num in range(1, n+1)])
+    
+class SquareSummator(Summator):
+    def __init__(self, m=2):
+        self.m = m
+    
+class QubeSummator(Summator):
+    def __init__(self, m=3):
+        self.m = m 
+    
+class CustomSummator(Summator):
+    def __init__(self, m):
+        self.m = m
+
+
+
 
 if __name__ == '__main__':
     print(SilverPlan.can_stream)
@@ -651,3 +672,12 @@ if __name__ == '__main__':
     print(counter.value)
     counter.dec(10)
     print(counter.value)
+
+
+    summator1 = Summator()
+    summator2 = CustomSummator(2)
+    summator3 = CustomSummator(3)
+
+    print(summator1.total(3))    # 1 + 2 + 3
+    print(summator2.total(3))    # 1 + 4 + 9
+    print(summator3.total(3))    # 1 + 8 + 27
