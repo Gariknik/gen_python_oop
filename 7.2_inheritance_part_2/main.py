@@ -699,8 +699,18 @@ False
 {}
 
 """
+class FieldTracker:
+    def base(self, attr):
+        pass
 
+    def has_changed(self):
+        pass
 
+    def changed(self):
+        pass
+
+    def save(self):
+        pass
 
 
 #8
@@ -743,6 +753,129 @@ Sample Output 2:
 class UpperPrintString(str):
     def __str__(self):
         return self.upper()
+
+#9
+"""
+Класс LowerString
+Реализуйте класс LowerString, наследника класса str, описывающий строку, которая во время создания автоматически переводится в нижний регистр. При создании экземпляра класс должен принимать один аргумент:
+
+obj — объект, определяющий начальное значение строки. Может быть не передан, в таком случае начальное значение считается пустой строкой
+Примечание 1. Дополнительная проверка данных на корректность не требуется. Гарантируется, что реализованный класс используется только с корректными данными.
+
+Примечание 2. Никаких ограничений касательно реализации класса LowerString нет, она может быть произвольной.
+
+Примечание 3. Тестовые данные доступны по ссылкам:
+
+Архив с тестами
+GitHub
+Sample Input 1:
+
+s1 = LowerString('BEEGEEK')
+s2 = LowerString('BeeGeek')
+
+print(s1)
+print(s2)
+print(s1 == s2)
+print(issubclass(LowerString, str))
+Sample Output 1:
+
+beegeek
+beegeek
+True
+True
+Sample Input 2:
+
+print(LowerString(['Bee', 'Geek']))
+print(LowerString({'A': 1, 'B': 2, 'C': 3}))
+Sample Output 2:
+
+['bee', 'geek']
+{'a': 1, 'b': 2, 'c': 3}
+Sample Input 3:
+
+s = LowerString('BeeGeek')
+
+print(s[0], s[3])
+Sample Output 3:
+
+b g
+
+"""
+class LowerString(str):
+    def __new__(cls, obj=None):
+        if obj:
+            return super().__new__(cls, str(obj).lower())
+        return super().__new__(cls, '')
+
+
+
+#10
+"""
+
+Класс FuzzyString
+Реализуйте класс FuzzyString, наследника класса str, описывающий строку, которая при любых сравнениях (==, !=, >, <, >=, <=) и проверках на принадлежность (in, not in) не учитывает регистр. Процесс создания экземпляра класса FuzzyString должен совпадать с процессом создания экземпляра класса str.
+
+Примечание 1. Если объект, с которым выполняется операция сравнения, некорректен, метод, реализующий эту операцию, должен вернуть константу NotImplemented.
+
+Примечание 2. Дополнительная проверка данных на корректность не требуется. Гарантируется, что реализованный класс используется только с корректными данными.
+
+Примечание 3. Никаких ограничений касательно реализации класса FuzzyString нет, она может быть произвольной.
+
+Примечание 4. Тестовые данные доступны по ссылкам:
+
+Архив с тестами
+GitHub
+Sample Input:
+
+s1 = FuzzyString('BeeGeek')
+s2 = FuzzyString('beegeek')
+
+print(s1 == s2)
+print(s1 in s2)
+print(s2 in s1)
+print(s2 not in s1)
+Sample Output:
+
+True
+True
+True
+False
+
+"""
+
+class FuzzyString(str):
+    def __eq__(self, other):
+        if not isinstance(other, (FuzzyString, str)):
+            return NotImplemented
+        return self.lower() == other.lower() 
+    def __ne__(self, other):
+        if not isinstance(other, (FuzzyString, str)):
+            return NotImplemented
+        return self.lower() != other.lower()      
+
+    def __lt__(self, other):
+        if not isinstance(other, (FuzzyString, str)):
+            return NotImplemented
+        return self.lower() < other.lower()  
+    def __gt__(self, other):
+        if not isinstance(other, (FuzzyString, str)):
+            return NotImplemented
+        return self.lower() > other.lower()  
+    def __le__(self, other):
+        if not isinstance(other, (FuzzyString, str)):
+            return NotImplemented
+        return self.lower() <= other.lower()  
+    def __ge__(self, other):
+        if not isinstance(other, (FuzzyString, str)):
+            return NotImplemented
+        return self.lower() >= other.lower()  
+    def __contains__(self, other):
+        if not isinstance(other, (FuzzyString, str)) or not isinstance(self, (FuzzyString, str)):
+            return NotImplemented
+        return other.lower() in self.lower()  
+
+
+
 
 if __name__ == '__main__':
     print(SilverPlan.can_stream)
@@ -827,3 +960,12 @@ if __name__ == '__main__':
 
     print(s1)
     print(s2)
+
+    print(LowerString(['Bee', 'Geek']))
+    print(LowerString({'A': 1, 'B': 2, 'C': 3}))
+
+    s1 = FuzzyString('BeeGeek')
+    s2 = FuzzyString('bee')
+
+    print(s2 in s1)
+    print(s1 in s2)
