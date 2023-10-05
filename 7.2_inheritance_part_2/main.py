@@ -996,6 +996,51 @@ Sample Output 4:
 
 """
 
+# class SuperInt(int):
+#     def __init__(self, num):
+#         self.num = num
+
+#     def __str__(self):
+#         return str(self.num)
+
+#     def repeat(self, rep=2):
+#         if self.num < 0:
+#             return SuperInt(int(str(self)[0] + str(self)[1:] * rep))
+#         return SuperInt(int(str(self)*rep))
+    
+#     def to_bin(self):
+#         bin_int = bin(self.num)
+#         if self.num < 0:   
+#             return bin_int[0]+bin_int[3:]
+#         return bin_int[2:]
+
+#     def next(self):
+#         return SuperInt(self.num+1)
+    
+#     def prev(self):
+#         return SuperInt(self.num-1)
+    
+#     def __iter__(self):
+#         return iter(map(SuperInt, str(abs(self))))
+    
+
+class SuperInt(int):
+    def repeat(self, n=2):
+        digit = f"{'-' * (self < 0)}{f'{abs(self)}' * n}"
+        return type(self)(digit)
+
+    def to_bin(self):
+        return f'{self:b}'
+
+    def next(self):
+        return type(self)(self + 1)
+
+    def prev(self):
+        return type(self)(self - 1)
+
+    def __iter__(self):
+        yield from map(SuperInt, str(abs(self)))
+
 
 
 
@@ -1194,3 +1239,9 @@ if __name__ == '__main__':
     print(titled)
     print(titled.title())
     print(issubclass(TitledText, str))
+
+
+    superint1 = SuperInt(2023)
+
+    for item in superint1:
+        print(item, type(item))
