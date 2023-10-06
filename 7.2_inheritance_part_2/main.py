@@ -1094,7 +1094,12 @@ Sample Output 2:
 <class '__main__.RoundedInt'>
 
 """
-
+class RoundedInt(int):
+    def __new__(cls, num, even=True):
+        num += (num % 2 == 1) if even else (num % 2 == 0)
+        instance = super().__new__(cls, num)
+        return instance
+    
 
 #14
 """
@@ -1245,3 +1250,8 @@ if __name__ == '__main__':
 
     for item in superint1:
         print(item, type(item))
+
+    print(RoundedInt(7))
+    print(RoundedInt(8))
+    print(RoundedInt(7, False))
+    print(RoundedInt(8, False))
