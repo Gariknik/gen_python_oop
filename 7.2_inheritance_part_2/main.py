@@ -1141,9 +1141,15 @@ Sample Output 2:
 (1, 2, 3, 4, 5, 6, 7, 8)
 <class '__main__.AdvancedTuple'>
 """
-
-
-
+class AdvancedTuple(tuple):
+    def __add__(self, other):
+        if hasattr(other, '__iter__'):
+            return AdvancedTuple(tuple(self) + tuple(other))
+        return NotImplemented
+    def __radd__(self, other):
+        if hasattr(other, '__iter__'):
+            return AdvancedTuple(tuple(other) + tuple(self))
+        return NotImplemented
 
 if __name__ == '__main__':
     print(SilverPlan.can_stream)
@@ -1255,3 +1261,10 @@ if __name__ == '__main__':
     print(RoundedInt(8))
     print(RoundedInt(7, False))
     print(RoundedInt(8, False))
+
+    advancedtuple = AdvancedTuple([1, 2, 3])
+
+    advancedtuple += [4, 5]
+    advancedtuple += iter([6, 7, 8])
+    print(advancedtuple)
+    print(type(advancedtuple))
