@@ -1151,6 +1151,55 @@ class AdvancedTuple(tuple):
             return AdvancedTuple(tuple(other) + tuple(self))
         return NotImplemented
 
+
+
+"""
+Класс ModularTuple
+Реализуйте класс ModularTuple, наследника класса tuple, описывающий кортеж, элементы которого во время создания автоматически делятся с остатком на заданное число. При создании экземпляра класс должен принимать два аргумента в следующем порядке:
+
+iterable — итерируемый объект, определяющий начальный набор элементов экземпляра класса ModularTuple. Если не передан, начальный набор элементов считается пустым
+size — целое число, на которое делятся с остатком все элементы создаваемого экземпляра класса ModularTuple, по умолчанию имеет значение 100
+Примечание 1. Экземпляр класса ModularTuple не должен зависеть от итерируемого объекта, на основе которого он был создан. Другими словами, если исходный итерируемый объект изменится, то экземпляр класса ModularTuple измениться  не должен.
+
+Примечание 2. Дополнительная проверка данных на корректность не требуется. Гарантируется, что реализованный класс используется только с корректными данными.
+
+Примечание 3. Никаких ограничений касательно реализации класса ModularTuple нет, она может быть произвольной.
+
+Примечание 4. Тестовые данные доступны по ссылкам:
+
+Архив с тестами
+GitHub
+Sample Input 1:
+
+modulartuple = ModularTuple([101, 102, 103, 104, 105])
+
+print(modulartuple)
+print(type(modulartuple))
+Sample Output 1:
+
+(1, 2, 3, 4, 5)
+<class '__main__.ModularTuple'>
+Sample Input 2:
+
+modulartuple = ModularTuple([1, 2, 3, 4, 5], 2)
+
+print(modulartuple)
+Sample Output 2:
+
+(1, 0, 1, 0, 1)
+
+
+"""
+
+class ModularTuple(tuple):
+    def __new__(cls, iterable=None, size=100):
+        if iterable:
+            iterable = map(lambda x: x%size, iterable)
+            instance = super().__new__(cls, iterable)
+            return instance
+        return super().__new__(cls, ())
+
+
 if __name__ == '__main__':
     print(SilverPlan.can_stream)
     print(SilverPlan.can_download)
@@ -1174,6 +1223,8 @@ if __name__ == '__main__':
 
     print(triangle1.perimeter())
     print(triangle2.perimeter())
+
+
 
 
 
@@ -1268,3 +1319,9 @@ if __name__ == '__main__':
     advancedtuple += iter([6, 7, 8])
     print(advancedtuple)
     print(type(advancedtuple))
+
+
+    modulartuple = ModularTuple([101, 102, 103, 104, 105])
+
+    print(modulartuple)
+    print(type(modulartuple))
