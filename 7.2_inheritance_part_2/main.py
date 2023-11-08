@@ -202,6 +202,7 @@ Sample Output 3:
 """
 from datetime import date
 from typing import Any
+# from typing_extensions import SupportsIndex
 
 class WeatherWarning:
     def rain(self):
@@ -1365,6 +1366,213 @@ class TwoWayDict(UserDict):
         self.data[value] = key
 
 
+"""
+Класс AdvancedList
+Реализуйте класс AdvancedList, наследника класса list, описывающий список с дополнительным функционалом. Процесс создания экземпляра класса AdvancedList должен совпадать с процессом создания экземпляра класса list.
+
+Класс AdvancedList должен иметь три метода экземпляра:
+
+join() — метод, объединяющий все элементы экземпляра класса AdvancedList в строку и возвращающий полученный результат. Метод должен принимать один строковый аргумент, по умолчанию равный пробелу, который является разделителем элементов списка в результирующей строке
+map() — метод, принимающий в качестве аргумента функцию func и применяющий ее к каждому элементу экземпляра класса AdvancedList. Метод должен изменять исходный экземпляр класса AdvancedList, а не возвращать новый
+filter() — метод, принимающий в качестве аргумента функцию func и удаляющий из экземпляра класса AdvancedList те элементы, для которых функция func вернула значение False. Метод должен изменять исходный экземпляр класса AdvancedList, а не возвращать новый
+Примечание 1. Дополнительная проверка данных на корректность не требуется. Гарантируется, что реализованный класс используется только с корректными данными.
+
+Примечание 2. Никаких ограничений касательно реализации класса AdvancedList нет, она может быть произвольной.
+
+Примечание 3. Тестовые данные доступны по ссылкам:
+
+Архив с тестами
+GitHub
+Sample Input 1:
+
+advancedlist = AdvancedList([1, 2, 3, 4, 5])
+
+print(advancedlist.join())
+print(advancedlist.join('-'))
+Sample Output 1:
+
+1 2 3 4 5
+1-2-3-4-5
+Sample Input 2:
+
+advancedlist = AdvancedList([1, 2, 3, 4, 5])
+
+advancedlist.map(lambda x: -x)
+
+print(advancedlist)
+Sample Output 2:
+
+[-1, -2, -3, -4, -5]
+Sample Input 3:
+
+advancedlist = AdvancedList([1, 2, 3, 4, 5])
+
+advancedlist.filter(lambda x: x % 2 == 0)
+
+print(advancedlist)
+Sample Output 3:
+
+[2, 4]
+Sample Input 4:
+
+advancedlist = AdvancedList([0, 1, 2, '', 3, (), 4, 5, False, {}])
+id1 = id(advancedlist)
+
+advancedlist.filter(bool)
+id2 = id(advancedlist)
+
+print(advancedlist)
+print(id1 == id2)
+Sample Output 4:
+
+[1, 2, 3, 4, 5]
+True
+"""
+
+
+class AdvancedList(list):
+    def join(self,  sep=' '):
+        string = ''
+        length = len(sep)
+        for ch in self:
+            string += str(ch)
+            string += sep
+        return string[:-length]
+    
+    def map(self, func):
+        self[:] = [func(el) for el in self]
+
+    def filter(self, func):
+        self[:] = [el for el in self if func(el)]
+
+
+
+"""
+
+Класс NumberList
+Реализуйте класс NumberList, наследника класса UserList, описывающий список, элементами которого могут быть лишь числа. При создании экземпляра класс должен принимать один аргумент:
+
+iterable — итерируемый объект, определяющий начальный набор элементов экземпляра класса NumberList. Если хотя бы один элемент переданного итерируемого объекта не является числом, должно быть возбуждено исключение TypeError с текстом:
+Элементами экземпляра класса NumberList должны быть числа
+Итерируемый объект может быть не передан, в таком случае начальный набор элементов считается пустым
+При изменении экземпляра класса NumberList с помощью индексов, операций сложения (+, +=) и методов append(), extend() и insert() должна производиться проверка на то, что добавляемые элементы являются числами, в противном случае должно возбуждаться исключение TypeError с текстом:
+
+Элементами экземпляра класса NumberList должны быть числа
+Примечание 1. Числами будем считать экземпляры классов int и float.
+
+Примечание 2. Экземпляр класса NumberList не должен зависеть от итерируемого объекта, на основе которого он был создан. Другими словами, если исходный итерируемый объект изменится, то экземпляр класса NumberList измениться  не должен.
+
+Примечание 3. Дополнительная проверка данных на корректность не требуется. Гарантируется, что реализованный класс используется только с корректными данными.
+
+Примечание 4. Никаких ограничений касательно реализации класса NumberList нет, она может быть произвольной.
+
+Примечание 5. Тестовые данные доступны по ссылкам:
+
+Архив с тестами
+GitHub
+Sample Input 1:
+
+numberlist = NumberList([1, 2])
+
+numberlist.append(3)
+numberlist.extend([4, 5])
+numberlist.insert(0, 0)
+print(numberlist)
+Sample Output 1:
+
+[0, 1, 2, 3, 4, 5]
+Sample Input 2:
+
+numberlist = NumberList([0, 1.0])
+
+numberlist[1] = 1
+numberlist = numberlist + NumberList([2, 3])
+numberlist += NumberList([4, 5])
+print(numberlist)
+Sample Output 2:
+
+[0, 1, 2, 3, 4, 5]
+Sample Input 3:
+
+try:
+    numberlist = NumberList(['a', 'b', 'c'])
+except TypeError as error:
+    print(error)
+Sample Output 3:
+
+Элементами экземпляра класса NumberList должны быть числа
+Sample Input 4:
+
+numberlist = NumberList([1, 2, 3])
+
+try:
+    numberlist.append('4')
+except TypeError as error:
+    print(error)
+Sample Output 4:
+
+Элементами экземпляра класса NumberList должны быть числа
+
+
+"""
+
+class NumberList(list):
+    
+    def __init__(self, iterable):
+        if self.check_num(iterable):
+            super().__init__(iterable)
+        else:
+            raise TypeError("Элементами экземпляра класса NumberList должны быть числа")
+   
+    @staticmethod
+    def check_num(obj):
+        if hasattr(obj, '__iter__'):
+            return all(type(el) in (int, float) for el in obj)
+        return type(obj) in (int, float)
+        
+    def __setitem__(self, key, value):
+        if self.check_num(value):
+            super().__setitem__(key, value)
+            return self
+        raise TypeError("Элементами экземпляра класса NumberList должны быть числа")
+
+    def __add__(self, other):
+        if isinstance(other, NumberList):
+            return super().__add__(other)
+        elif isinstance(other,  list):  
+            return super().__add__(NumberList(other))
+        return NotImplemented
+
+    def __iadd__(self, other):
+        if isinstance(other,  NumberList):
+            super().__iadd__(other)
+            return self
+        elif isinstance(other,  list):
+            super().__iadd__(NumberList(other))
+            return self
+        return NotImplemented
+    
+    def append(self, num):
+        if self.check_num(num):
+            super().append(num)
+            return self
+        raise TypeError("Элементами экземпляра класса NumberList должны быть числа")
+        
+    def extend(self, it):
+        if self.check_num(it):
+            super().extend(it)
+            return self
+        raise TypeError("Элементами экземпляра класса NumberList должны быть числа")
+    
+    def insert(self, index, obj):
+        if type(obj) in (int, float):
+            super().insert(index, obj)
+            return self
+        raise TypeError("Элементами экземпляра класса NumberList должны быть числа")
+
+
+
+
 if __name__ == '__main__':
     print(SilverPlan.can_stream)
     print(SilverPlan.can_download)
@@ -1515,3 +1723,10 @@ if __name__ == '__main__':
     print(twowaydict[1])
     print(twowaydict['banana'])
     print(twowaydict[2])
+
+    numberlist = NumberList([1, 2, 3])
+
+    try:
+        numberlist.append('4')
+    except TypeError as error:
+        print(error)
