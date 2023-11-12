@@ -1689,9 +1689,75 @@ class BirthdayDict(UserDict):
         super().__setitem__(key, value)
         
         
+"""
 
-        
-                
+Класс MutableString
+Реализуйте класс MutableString, наследника класса UserString, описывающий изменяемую строку. Процесс создания экземпляра класса MutableString должен совпадать с процессом создания экземпляра класса UserString.
+
+Класс MutableString должен иметь три метода экземпляра:
+
+lower() — метод, переводящий все символы изменяемой строки в нижний регистр
+upper() — метод, переводящий все символы изменяемой строки в верхний регистр
+sort() — метод, сортирующий символы изменяемой строки. Может принимать два необязательных именованных аргумента key и reverse, выполняющих ту же задачу, что и в функции sorted()
+Экземпляр класса MutableString должен позволять получать, изменять и удалять значения своих элементов с помощью индексов, причем как положительных, так и отрицательных.
+
+Примечание 1. Дополнительная проверка данных на корректность не требуется. Гарантируется, что реализованный класс используется только с корректными данными.
+
+Примечание 2. Никаких ограничений касательно реализации класса MutableString нет, она может быть произвольной.
+
+Примечание 3. Тестовые данные доступны по ссылкам:
+
+Архив с тестами
+GitHub
+Sample Input 1:
+
+mutablestring = MutableString('Beegeek')
+
+mutablestring.lower()
+print(mutablestring)
+mutablestring.upper()
+print(mutablestring)
+mutablestring.sort()
+print(mutablestring)
+Sample Output 1:
+
+beegeek
+BEEGEEK
+BEEEEGK
+Sample Input 2:
+
+mutablestring = MutableString('beegeek')
+
+print(mutablestring)
+mutablestring[0] = 'B'
+mutablestring[-4] = 'G'
+print(mutablestring)
+Sample Output 2:
+
+beegeek
+BeeGeek
+
+"""
+from collections import UserString
+class MutableString(UserString):
+    def lower(self):
+        self.data = self.data.lower()
+    
+    def upper(self):
+        self.data = self.data.upper()
+    
+    def sort(self, key=None, reverse=False):
+        self.data = ''.join(sorted(self.data, key=key, reverse=reverse))
+    
+    def __setitem__(self, key, value):
+        lst = list(self.data)
+        lst[key] = value
+        self.data = ''.join(lst)
+
+    def __delitem__(self, key):
+        lst = list(self.data)
+        del lst[key]
+        self.data = ''.join(lst)
         
 
 if __name__ == '__main__':
@@ -1866,3 +1932,12 @@ if __name__ == '__main__':
     birthdaydict['Том'] = date(1984, 7, 15)
     birthdaydict['Мария'] = date(1989, 10, 1)
     birthdaydict['Боб'] = date(1989, 10, 1)
+
+    mutablestring = MutableString('Beegeek')
+
+    mutablestring.lower()
+    print(mutablestring)
+    mutablestring.upper()
+    print(mutablestring)
+    mutablestring.sort()
+    print(mutablestring)
