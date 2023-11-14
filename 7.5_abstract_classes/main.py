@@ -111,6 +111,85 @@ class Harmonic(Middle):
         return len(votes) / sum(map(lambda vote: 1 / vote, votes))
     
 
+#2
+"""
+
+Классы ChessPiece, King и Knight
+1. Реализуйте абстрактный класс ChessPiece, описывающий шахматную фигуру. Инициализатор класса должен принимать два аргумента в следующем порядке:
+
+horizontal — координата фигуры по горизонтали, представленная латинской буквой от a до h
+vertical — координата фигуры по вертикали, представленная целым числом от 1 до 8 включительно
+Класс ChessPiece должен иметь один метод экземпляра:
+
+can_move() — пустой абстрактный метод
+2. Также реализуйте класс King, наследника класса ChessPiece, описывающий шахматного короля. Процесс создания экземпляра класса King должен совпадать с процессом создания экземпляра класса ChessPiece.
+
+Класс King должен иметь один метод экземпляра:
+
+can_move() — метод, принимающий в качестве аргументов шахматные координаты по горизонтали и вертикали и возвращающий True, если фигура может переместиться по указанным координатам, или False в противном случае
+Экземпляр класса King  должен иметь два атрибута:
+
+horizontal — координата фигуры по горизонтали, представленная латинской буквой от a до h
+vertical — координата фигуры по вертикали, представленная целым числом от 1 до 8 включительно
+3. Наконец, реализуйте класс Knight, наследника класса ChessPiece, описывающий шахматного коня. Процесс создания экземпляра класса Knight должен совпадать с процессом создания экземпляра класса ChessPiece.
+
+Класс Knight должен иметь один метод экземпляра:
+
+can_move() — переопределенный родительский метод, принимающий в качестве аргументов координаты по горизонтали и вертикали и возвращающий True, если фигура может переместиться по указанным координатам, и False в противном случае
+Экземпляр класса Knight  должен иметь два атрибута:
+
+horizontal — координата фигуры по горизонтали, представленная латинской буквой от a до h
+vertical — координата фигуры по вертикали, представленная целым числом от 1 до 8 включительно
+Примечание 1. Шахматная доска имеет вид:
+
+Примечание 2. Дополнительная проверка данных на корректность не требуется. Гарантируется, что реализованные классы используется только с корректными данными.
+
+Примечание 3. Никаких ограничений касательно реализаций классов нет, она может быть произвольной.
+
+Примечание 4. Тестовые данные доступны по ссылкам:
+
+Архив с тестами
+GitHub
+Sample Input:
+
+king = King('b', 2)
+
+print(king.can_move('c', 3))
+print(king.can_move('a', 1))
+print(king.can_move('f', 7))
+Sample Output:
+
+True
+True
+False
+
+"""
+from abc import ABC, abstractmethod
+class ChessPiece(ABC):
+    hor_coords = {'a': 1, 'b': 2, 'c': 3, 'd': 4, 'e': 5, 'f': 6, 'g': 7, 'h': 8}
+    vert_coords = {1: 1, 2: 2, 3: 3, 4: 4, 5: 5, 6: 6, 7: 7, 8: 8}      
+    def __init__(self, horizontal, vertical):
+        self.horizontal = horizontal
+        self.vertical = vertical
+    
+    @abstractmethod
+    def can_move(self, horizontal_to, vertical_to):
+        raise NotImplementedError
+    
+class King(ChessPiece):
+    def can_move(self, horizontal_to, vertical_to):
+        return (self.hor_coords[self.horizontal] - self.hor_coords[horizontal_to] in (1, -1) and\
+              self.vert_coords[self.vertical] - self.vert_coords[vertical_to] == 0) or\
+            (self.vert_coords[self.vertical] - self.vert_coords[vertical_to] in (1, -1) and\
+            self.hor_coords[self.horizontal] - self.hor_coords[horizontal_to] == 0) or\
+            (self.vert_coords[self.vertical] - self.vert_coords[vertical_to] in (1, -1) and\
+            self.hor_coords[self.horizontal] - self.hor_coords[horizontal_to] in (1, -1))
+    
+class Knight(ChessPiece):
+    def can_move(self, horizontal_to, vertical_to):
+        return (self.hor_coords[horizontal_to] - self.hor_coords[self.horizontal]) ** 2\
+              + (self.vert_coords[vertical_to] - self.vert_coords[self.vertical]) ** 2 == 5
+
 
 if __name__ == '__main__':
     user_votes = [99, 90, 71, 1, 1, 100, 56, 60, 80]
@@ -121,3 +200,9 @@ if __name__ == '__main__':
     print(average.get_correct_expert_votes())
     print(average.get_average())
     print(average.get_average(False))
+
+    king = King('b', 2)
+
+    print(king.can_move('c', 3))
+    print(king.can_move('a', 1))
+    print(king.can_move('f', 7))
