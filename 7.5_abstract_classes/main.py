@@ -191,6 +191,18 @@ class Knight(ChessPiece):
               + (self.vert_coords[vertical_to] - self.vert_coords[self.vertical]) ** 2 == 5
 
 
+from collections.abc import *
+print(isinstance([1, 2, 3], Iterable))
+print(isinstance([1, 2, 3], Iterator))
+print(isinstance([1, 2, 3], Reversible))
+print(isinstance([1, 2, 3], Collection))
+print(isinstance([1, 2, 3], Sequence))
+print(isinstance([1, 2, 3], MutableSequence))
+print(isinstance([1, 2, 3], Mapping))
+print(isinstance([1, 2, 3], MutableMapping))
+
+
+
 if __name__ == '__main__':
     user_votes = [99, 90, 71, 1, 1, 100, 56, 60, 80]
     expert_votes = [87, 90, 67, 70, 81, 85, 97, 79, 71]
@@ -206,3 +218,53 @@ if __name__ == '__main__':
     print(king.can_move('c', 3))
     print(king.can_move('a', 1))
     print(king.can_move('f', 7))
+    print('____________________')
+
+    from collections.abc import *
+    print(isinstance([1, 2, 3], Iterable))
+    print(isinstance([1, 2, 3], Iterator))
+    print(isinstance([1, 2, 3], Reversible))
+    print(isinstance([1, 2, 3], Collection))
+    print(isinstance([1, 2, 3], Sequence))
+    print(isinstance([1, 2, 3], MutableSequence))
+    print(isinstance([1, 2, 3], Mapping))
+    print(isinstance([1, 2, 3], MutableMapping))
+
+    print('____________________')
+
+    from collections.abc import *
+    print(isinstance({1, 2, 3}, Iterable))
+    print(isinstance({1, 2, 3}, Iterator))
+    print(isinstance({1, 2, 3}, Reversible))
+    print(isinstance({1, 2, 3}, Collection))
+    print(isinstance({1, 2, 3}, Sequence))
+    print(isinstance({1, 2, 3}, MutableSequence))
+    print(isinstance({1, 2, 3}, Set))
+    print(isinstance({1, 2, 3}, MutableSet))
+
+
+    print('____________________')
+
+    from collections.abc import *
+    print(isinstance({'one': 1, 'two': 2}, Iterable))
+    print(isinstance({'one': 1, 'two': 2}, Iterator))
+    print(isinstance({'one': 1, 'two': 2}, Reversible))
+    print(isinstance({'one': 1, 'two': 2}, Collection))
+    print(isinstance({'one': 1, 'two': 2}, Sequence))
+    print(isinstance({'one': 1, 'two': 2}, MutableSequence))
+    print(isinstance({'one': 1, 'two': 2}, Mapping))
+    print(isinstance({'one': 1, 'two': 2}, MutableMapping))
+
+    print('____________________')
+    reversed('123')
+    reversed((1, 2, 3))
+    reversed([1, 2, 3])
+    reversed({'one': 1, 'two': 2})
+
+    print('____________________')
+    from collections.abc import *
+
+    obj = range(10)
+
+    print(isinstance(obj, Sequence))
+    print(isinstance(obj, MutableSequence))
