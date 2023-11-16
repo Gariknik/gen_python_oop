@@ -268,3 +268,31 @@ if __name__ == '__main__':
 
     print(isinstance(obj, Sequence))
     print(isinstance(obj, MutableSequence))
+
+
+    class SequenceIterator:
+        def __init__(self, iterable):
+            self.iterable = iterable
+            self.index = 0
+            self.flag = True
+        def __iter__(self):
+            return self
+        def __next__(self):
+            if self.index >= len(self.iterable):
+                if self.flag:
+                    self.flag = False
+                    self.index = 1
+                else:
+                    raise StopIteration
+            result = self.iterable[self.index]
+            self.index += 2
+            return result   
+            
+            
+
+
+    container = SequenceIterator([1, 5, 4, 6, 43, True, 'hello'])
+    for i in container:
+        print(i)
+    for i in container:
+        print(i)
