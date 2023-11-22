@@ -296,3 +296,48 @@ if __name__ == '__main__':
         print(i)
     for i in container:
         print(i)
+
+
+    import json
+
+
+    # Напишите определение класса AppConfig
+    class AppConfig:
+        data = None
+        @classmethod
+        def load_config(cls, name_file):
+            with open(name_file) as f:
+                cls.data = json.load(f)
+        @classmethod
+        def get_config(cls, key):
+            return cls.data[key]
+
+                
+                
+
+
+    class FibonacciIterator:
+        def __init__(self, n):
+            self.n = n
+            self.index = -1
+            self.num_1 = 0
+            self.num_2 = 1
+            
+        def __iter__(self):
+            return self
+        
+        def __next__(self):
+            self.index += 1
+            result = self.num_1
+            if self.index >= self.n:
+                raise StopIteration
+            if self.num_1 == 0:
+                self.num_1, self.num_2 = self.num_2, self.num_1 + self.num_2
+                return result
+            self.num_1, self.num_2 = self.num_2, self.num_1 + self.num_2
+            return result
+    fibonacci_iter = FibonacciIterator(7)
+
+    for number in fibonacci_iter:
+        print(number)
+
