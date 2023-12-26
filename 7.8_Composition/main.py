@@ -377,7 +377,121 @@ class Queue:
     def __len__(self):
         return len(self.pairs)
 
+"""
+Классы Lecture и Conference🌶️🌶️
+1. Реализуйте класс Lecture, описывающий некоторое выступление. При создании экземпляра класс должен принимать три аргумента в следующем порядке:
 
+topic — тема выступления
+start_time — время начала выступления в виде строки в формате HH:MM
+duration — длительность выступления в виде строки в формате HH:MM
+2. Также реализуйте класс Conference, описывающий конференцию, протяженностью в один день. Конференция представляет собой набор последовательных выступлений. При создании экземпляра класс не должен принимать никаких аргументов.
+
+Класс Conference должен иметь четыре метода экземпляра:
+
+add() — метод, принимающий в качестве аргумента выступление и добавляющий его в конференцию. Если выступление пересекается по времени с другими выступлениями, должно быть возбуждено исключение ValueError с текстом:
+Провести выступление в это время невозможно
+total() — метод, возвращающий суммарную длительность всех выступлений в конференции в виде строки в формате HH:MM
+longest_lecture() — метод, возвращающий длительность самого долгого выступления в конференции в виде строки в формате HH:MM
+longest_break() — метод, возвращающий длительность самого долгого перерыва между выступлениями в конференции в виде строки в формате HH:MM
+Примечание 1. Перерыв между выступлениями может быть нулевым. Другими словами, одно выступление может заканчиваться, например, в 12:00, а другое начинаться в 12:00.
+
+Примечание 2. Дополнительная проверка данных на корректность не требуется. Гарантируется, что реализованные классы используются только с корректными данными.
+
+Примечание 3. Никаких ограничений касательно реализаций классов нет, они могут быть произвольными.
+
+Примечание 4. Тестовые данные доступны по ссылкам:
+
+Архив с тестами
+GitHub
+Sample Input 1:
+
+conference = Conference()
+
+conference.add(Lecture('Простые числа', '08:00', '01:30'))
+conference.add(Lecture('Жизнь после ChatGPT', '10:00', '02:00'))
+conference.add(Lecture('Муравьиный алгоритм', '13:30', '01:50'))
+print(conference.total())
+print(conference.longest_lecture())
+print(conference.longest_break())
+Sample Output 1:
+
+05:20
+02:00
+01:30
+Sample Input 2:
+
+conference = Conference()
+conference.add(Lecture('Простые числа', '08:00', '01:30'))
+
+try:
+    conference.add(Lecture('Жизнь после ChatGPT', '09:00', '02:00'))
+except ValueError as error:
+    print(error)
+Sample Output 2:
+
+Провести выступление в это время невозможно
+Sample Input 3:
+
+conference = Conference()
+conference.add(Lecture('Простые числа', '08:00', '01:00'))
+conference.add(Lecture('Жизнь после ChatGPT', '11:00', '02:00'))
+
+try:
+    conference.add(Lecture('Муравьиный алгоритм', '10:00', '04:00'))
+except ValueError as error:
+    print(error)
+Sample Output 3:
+
+Провести выступление в это время невозможно
+
+"""
+
+class Lecture:
+    def __init__(self, topic, start_time, duration):
+        self.topic = topic
+        self.start_time = start_time
+        self.duration = duration
+        self.end_time = self.to_format(self.to_minutes(self.start_time) + self.to_minutes(self.duration))
+
+    def to_minutes(self, time):
+        hours, minutes = map(int, time.split(':'))
+        return hours*60 + minutes
+    @staticmethod
+    def to_format(minutes):
+        return f"{minutes//60:02}:{minutes%60:02}"
+
+class Conference:
+    def __init__(self):
+        self.lectures = []
+        self.duration_breaks = []
+    @staticmethod
+    def to_format(minutes):
+        return f"{minutes//60:02}:{minutes%60:02}"
+    
+    @staticmethod
+    def predicate_add_lectures(lecture, lectures):
+        return any([set(range(lecture.to_minutes(lecture.start_time), lecture.to_minutes(lecture.end_time))) & set(range(l.to_minutes(l.start_time), l.to_minutes(l.end_time))) for l in lectures])
+    
+    def add(self, lecture):
+        if self.predicate_add_lectures(lecture, self.lectures):
+            raise ValueError ('Провести выступление в это время невозможно')
+        self.lectures.append(lecture)
+        self.lectures = sorted(self.lectures, key=lambda x: x.to_minutes(x.start_time))
+
+
+    def total(self):
+        total_minutes = sum([l.to_minutes(l.duration)for l in self.lectures])
+        return self.to_format(total_minutes)
+    
+    def longest_lecture(self):
+        long_lect_minutes = max(self.lectures, key=lambda x: x.to_minutes(x.duration)).duration
+        return long_lect_minutes
+    
+    def longest_break(self):
+        if len(self.lectures) > 1:
+            duration_breaks = [self.lectures[i].to_minutes(self.lectures[i].start_time) - self.lectures[i-1].to_minutes(self.lectures[i-1].end_time) for i in range(1, len(self.lectures))]
+        long_break_minutes = max(duration_breaks)
+        return self.to_format(long_break_minutes)
 
 if __name__ == "__main__":
     point = Point(1, 1)
@@ -405,3 +519,15 @@ if __name__ == "__main__":
     print(queue)
     queue.add(('one', 10))
     print(queue)
+
+    conference = Conference()
+    conference.add(Lecture('Декораторы @classmethod и @staticmethod', '09:30', '00:30'))
+    conference.add(Lecture('Декоратор @singledispatchmethod', '09:00', '00:30'))
+    conference.add(Lecture('Создание, инициализация и очищение объектов', '11:00', '00:30'))
+    conference.add(Lecture('Унарные операторы и функции', '10:45', '00:15'))
+    conference.add(Lecture('Арифметические операции', '10:00', '00:30'))
+    conference.add(Lecture('Вызываемые объекты', '08:00', '01:00'))
+
+    print(conference.total())
+    print(conference.longest_lecture())
+    print(conference.longest_break())
