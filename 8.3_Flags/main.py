@@ -144,3 +144,22 @@ if __name__ == '__main__':
     print(movie.in_genre(MovieGenres.FANTASY))
     print(movie.in_genre(MovieGenres.COMEDY))
     print(movie.in_genre(MovieGenres.ACTION | MovieGenres.FANTASY))
+
+    import re
+    def slugify(url: str) -> str:
+        modify_string = url.lower().strip("!@#$%^&*()_+-={}[]|\:;'<>,.?/~` ")
+        pattern = r"\W"
+        result = re.sub(pattern, '-', modify_string)
+        return re.sub(r'[\-]{2,}', '-', result)
+        
+
+    assert slugify("Hello World") == "hello-world"
+    assert slugify("Hello, World!") == "hello-world"
+    assert slugify("The 20th Century") == "the-20th-century"
+    assert slugify("    Hello      World     ") == "hello-world"
+    #assert slugify("Hello World   ") == "hello-world"
+    #assert slugify("") == ""
+    #assert slugify("!@#$%^&*()_+-={}[]|\:;'<>,.?/~`") == ""
+    #assert slugify('hello----world') == 'hello-world'
+
+    print(slugify("Hello, World!"))
