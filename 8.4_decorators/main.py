@@ -322,8 +322,202 @@ class ignore_exception:
             except self.exceptions as e:
                 print(f'Исключение {e.__class__.__name__} обработано')
         return wrapper
+"""
+Декоратор @type_check
+Реализуйте класс декоратор @type_check, который принимает один аргумент:
 
+types — список, элементами которого являются типы данных
+Декоратор должен проверять, что типы всех позиционных аргументов, передаваемых в декорируемую функцию, полностью сопоставляются с типами из списка types, то есть типом первого аргумента является первый элемент списка types, типом второго аргумента — второй элемент списка types, и так далее. Если данное условие не выполняется, должно быть возбуждено исключение TypeError.
+
+Если количество позиционных аргументов больше, чем количество элементов в списке types, то не сопоставляемые аргументы не должны учитываться при проверке. Если количество позиционных аргументов меньше чем количество элементов в списке types, то не сопоставляемые типы из списка types не должны учитываться при проверке.
+
+Примечание 1. Не забывайте про то, что декоратор не должен поглощать возвращаемое значение декорируемой функции, а также должен уметь декорировать функции с произвольным количеством позиционных и именованных аргументов.
+
+Примечание 2. В тестирующую систему сдайте программу, содержащую только необходимый декоратор @type_check, но не код, вызывающий его.
+
+Примечание 3. Тестовые данные доступны по ссылкам:
+
+Архив с тестами
+GitHub
+Sample Input 1:
+
+@type_check([int, int])
+def add(a, b):
+    return a + b
+
+print(add(1, 2))
+Sample Output 1:
+
+3
+Sample Input 2:
+
+@type_check([int, int])
+def add(a, b):
+    return a + b
+
+try:
+    print(add(1, '2'))
+except Exception as error:
+    print(type(error))
+Sample Output 2:
+
+<class 'TypeError'>
+Sample Input 3:
+
+@type_check([int, int, str, list])
+def add(a, b):
+    '''sum a and b'''
+    return a + b
+
+print(add.__name__)
+print(add.__doc__)
+print(add(1, 2))
+Sample Output 3:
+
+add
+sum a and b
+3
+Sample Input 4:
+
+@type_check([int, int])
+def add(a, b, c):
+    return a + b + c
+
+print(add(1, 2, 3.0))
+Sample Output 4:
+
+6.0
+"""
+
+import functools
+
+class type_check:
+    def __init__(self, types):
+        self.types = types
+    
+    def __call__(self, func):
+        @functools.wraps(func)
+        def wrapper(*args, **kwargs):
+            if all([type(el) == t for el, t in zip(args, self.types)]):
+                return func(*args, **kwargs)
+            raise TypeError
+        return wrapper
         
+
+"""
+Декоратор @track_instances
+Реализуйте декоратор @track_instances для декорирования класса. Декоратор должен добавлять декорируемому классу атрибут instances, содержащий список всех созданных экземпляров этого класса.
+
+Примечание 1. Экземпляры декорируемого класса в списке по атрибуту instances должны располагаться в том порядке, в котором они были созданы.
+
+Примечание 2. Тестовые данные доступны по ссылкам:
+
+Архив с тестами
+GitHub
+Sample Input:
+
+@track_instances
+class Person:
+    def __init__(self, name):
+        self.name = name
+
+    def __repr__(self):
+        return f'Person({self.name!r})'
+
+
+obj1 = Person('object 1')
+obj2 = Person('object 2')
+
+print(Person.instances)
+Sample Output:
+
+[Person('object 1'), Person('object 2')]
+
+"""
+
+import functools
+
+def track_instances(cls):
+    old_init = cls.__init__
+    cls.instances = []
+
+    @functools.wraps(old_init)
+    def wrapper(self, *args, **kwargs):
+        old_init(self, *args, **kwargs)
+        cls.instances += [self]
+    cls.__init__ = wrapper
+    return cls
+
+
+"""
+Декоратор @add_attr_to_class
+Словарь атрибутов класса, в отличие от словаря атрибутов экземпляра класса, является объектом типа mappingproxy, а не dict.
+
+Приведенный ниже код:
+
+class MyClass:
+    pass
+
+
+print(type(MyClass.__dict__))
+выводит:
+
+<class 'mappingproxy'>
+Тип mappingproxy представляет собой упрощенный словарь. От типа dict он отличается меньшим количеством методов, а главное — отсутствием магического метода __setitem__(). Это значит, в объект типа mappingproxy нельзя напрямую добавить новую пару ключ-значение, а также изменить значение имеющегося ключа.
+
+Приведенный ниже код:
+
+class MyClass:
+    pass
+
+
+MyClass.__dict__['__doc__'] = 'docstring'
+приводит к возбуждению исключения:
+
+TypeError: 'mappingproxy' object does not support item assignment
+Для добавления классу необходимого атрибута можно использовать функцию setattr().
+
+Приведенный ниже код:
+
+class MyClass:
+    pass
+
+
+setattr(MyClass, '__doc__', 'docstring')
+
+print(MyClass.__doc__)
+выводит:
+
+docstring
+Реализуйте декоратор @add_attr_to_class для декорирования класса. Декоратор должен принимать произвольное количество именованных аргументов и добавлять их декорируемому классу в качестве атрибутов.
+
+Примечание. Тестовые данные доступны по ссылкам:
+
+Архив с тестами
+GitHub
+Sample Input:
+
+@add_attr_to_class(first_attr=1, second_attr=2)
+class MyClass:
+    pass
+
+print(MyClass.first_attr)
+print(MyClass.second_attr)
+Sample Output:
+
+1
+2
+
+"""
+
+
+def add_attr_to_class(**kwargs):
+    def decorator(cls):
+        for key, value in kwargs.items():
+            setattr(cls, key, value)
+        return cls
+    return decorator
+
 
 
 if __name__ == '__main__':
@@ -362,3 +556,31 @@ if __name__ == '__main__':
         return 1 / x
         
     func(0)
+
+    @type_check([int, int])
+    def add(a, b, c):
+        return a + b + c
+
+    print(add(1, 2, 3.0))
+
+    @track_instances
+    class Person:
+        def __init__(self, name):
+            self.name = name
+
+        def __repr__(self):
+            return f'Person({self.name!r})'
+
+
+    obj1 = Person('object 1')
+    obj2 = Person('object 2')
+
+    print(Person.instances)
+
+
+    @add_attr_to_class(first_attr=1, second_attr=2)
+    class MyClass:
+        pass
+
+    print(MyClass.first_attr)
+    print(MyClass.second_attr)
