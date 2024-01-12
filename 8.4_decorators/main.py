@@ -669,24 +669,26 @@ Sample Output 3:
 
 """
 import functools
+import re
 
 
 def snake_case(attrs=False):
     def decorator(cls):
-        print(cls.__dict__)
-        dct = tuple(cls.__dict__.items())
+        p = r'(\_)\1\w+\1{2}' 
+        dct = [ (k, v) for k, v in list(cls.__dict__.items()) if not re.match(p, k) ]
         for key, value in dct:
             new_key = ''
-            if not key.startswith('_'):
+            if attrs and not callable(value):
                 delattr(cls, key)
-                print(callable(key))
-                if attrs and not callable(key):
-                    for i in range(len(key)):
-                        new_key += f'_{key[i].lower()}' if key[i].isupper() else key[i]
-                else:
-                    for i in range(len(key)):
-                        new_key += f'_{key[i].lower()}' if key[i].isupper() else key[i]
-            new_key = new_key.strip('_')
+                for i in range(len(key)):
+                    new_key += f' {key[i].lower()}' if key[i].isupper() else key[i]
+            elif not attrs and callable(value):
+                delattr(cls, key)
+                for i in range(len(key)):
+                    new_key += f' {key[i].lower()}' if key[i].isupper() else key[i]
+            new_key = re.sub(r'\_+', '_', '_'.join(new_key.split()))
+            print(new_key)
+            
             setattr(cls, new_key, value)
         return cls
     return decorator
@@ -770,13 +772,14 @@ if __name__ == '__main__':
 
     @snake_case()
     class MyClass:
-        FirstAttr = 1
-
-        def FirstMethod(self):
+        def _FirstMethod(self):
             return 1
+
+        def _superSecondMethod(self):
+            return 2
 
 
     obj = MyClass()
 
-
-    print(obj.first_method())
+    print(obj.__dict__)
+    print(obj._super_second_method())
