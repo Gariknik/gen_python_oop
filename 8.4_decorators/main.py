@@ -519,6 +519,178 @@ def add_attr_to_class(**kwargs):
     return decorator
 
 
+"""
+Декоратор @jsonattr
+Реализуйте декоратор @jsonattr для декорирования класса. Декоратор должен принимать один аргумент:
+
+filename — имя json файла, содержимым которого является JSON объект
+Декоратор должен открывать файл filename и добавлять в качестве атрибута декорируемому классу каждую пару ключ-значение JSON объекта, содержащегося в этом файле.
+
+Примечание. Тестовые данные доступны по ссылкам:
+
+Архив с тестами
+GitHub
+Sample Input:
+
+with open('test.json', 'w') as file:
+    file.write('{"x": 1, "y": 2}')
+
+@jsonattr('test.json')
+class MyClass:
+    pass
+    
+print(MyClass.x)
+print(MyClass.y)
+Sample Output:
+
+1
+2
+
+"""
+import json
+
+def jsonattr(file_name):
+    def decorator(cls):
+        with open(file_name) as file:
+            data = json.load(file)
+            for key, value in data.items():
+                setattr(cls, key, value)
+        return cls
+    return decorator
+
+
+"""
+Декоратор @singleton
+Реализуйте декоратор @singleton для декорирования класса. Декоратор должен превращать декорируемый класс в синглтон, то есть в класс, при первом вызове создающий единственный свой экземпляр и при последующих вызовах возвращающий его же.
+
+Примечание 1. Подробнее почитать про шаблон проектирования синглтон можно по ссылке.
+
+Примечание 2. Тестовые данные доступны по ссылкам:
+
+Архив с тестами
+GitHub
+Sample Input:
+
+@singleton
+class MyClass:
+    pass
+    
+obj1 = MyClass()
+obj2 = MyClass()
+
+print(obj1 is obj2)
+Sample Output:
+
+True
+
+"""
+import functools
+
+def singleton(cls):
+    cls.instance = None
+    old_new = cls.__new__
+
+    @functools.wraps(old_new)
+    def wrapper(cls, *args, **kwargs):
+        if cls.instance is None:
+            cls.instance = old_new(cls)
+        return cls.instance
+
+    cls.__new__ = wrapper
+    return cls
+    
+
+"""
+Декоратор @snake_case
+Snake Case — стиль написания составных слов, при котором несколько слов разделяются символом нижнего подчеркивания (_) и не имеют пробелов в записи, причём каждое слово пишется с маленькой буквы. Например, bee_geek и hello_world.
+
+Upper Camel Case — стиль написания составных слов, при котором несколько слов пишутся слитно без пробелов, при этом каждое слово пишется с заглавной буквы. Например, BeeGeek и HelloWorld.
+
+Реализуйте декоратор @snake_case для декорирования класса. Декоратор должен принимать один аргумент:
+
+attrs — булево значение, по умолчанию равняется False
+Декоратор должен переименовать все не магические методы в декорируемом классе, меняя их стиль написания c Camel Case и Lower Camel Case на Snake case. Параметр attrs должен определять, будут ли аналогичным образом переименованы атрибуты класса. Если он имеет значение True, стиль написания имен атрибутов класса должен поменяться с Camel Case и Lower Camel Case на Snake case, если False — остаться прежним.
+
+Примечание 1. Гарантируется, что имена всех не магических методов и атрибутов в классе написаны в стилях Camel Case, LowerCamelCase или Snake Case.
+
+Примечание 2. Тестовые данные доступны по ссылкам:
+
+Архив с тестами
+GitHub
+Sample Input 1:
+
+@snake_case()
+class MyClass:
+    def FirstMethod(self):
+        return 1
+    
+    def superSecondMethod(self):
+        return 2
+
+obj = MyClass()
+
+print(obj.first_method())
+print(obj.super_second_method())
+Sample Output 1:
+
+1
+2
+Sample Input 2:
+
+@snake_case(attrs=True)
+class MyClass:
+    FirstAttr = 1
+    superSecondAttr = 2
+
+print(MyClass.first_attr)
+print(MyClass.super_second_attr)
+Sample Output 2:
+
+1
+2
+Sample Input 3:
+
+@snake_case()
+class MyClass:
+    FirstAttr = 1
+
+    def FirstMethod(self):
+        return 1
+
+
+obj = MyClass()
+
+print(MyClass.FirstAttr)
+print(obj.first_method())
+Sample Output 3:
+
+1
+1
+
+"""
+import functools
+
+
+def snake_case(attrs=False):
+    def decorator(cls):
+        print(cls.__dict__)
+        dct = tuple(cls.__dict__.items())
+        for key, value in dct:
+            new_key = ''
+            if not key.startswith('_'):
+                delattr(cls, key)
+                print(callable(key))
+                if attrs and not callable(key):
+                    for i in range(len(key)):
+                        new_key += f'_{key[i].lower()}' if key[i].isupper() else key[i]
+                else:
+                    for i in range(len(key)):
+                        new_key += f'_{key[i].lower()}' if key[i].isupper() else key[i]
+            new_key = new_key.strip('_')
+            setattr(cls, new_key, value)
+        return cls
+    return decorator
+
 
 if __name__ == '__main__':
     @takes_numbers
@@ -584,3 +756,27 @@ if __name__ == '__main__':
 
     print(MyClass.first_attr)
     print(MyClass.second_attr)
+
+
+    @singleton
+    class MyClass:
+        pass
+        
+    obj1 = MyClass()
+    obj2 = MyClass()
+
+    print(obj1 is obj2)
+
+
+    @snake_case()
+    class MyClass:
+        FirstAttr = 1
+
+        def FirstMethod(self):
+            return 1
+
+
+    obj = MyClass()
+
+
+    print(obj.first_method())
