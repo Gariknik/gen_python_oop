@@ -139,6 +139,140 @@ class MusicAlbum:
         return f"{self.__class__.__name__}(title='{self.title}', artist='{self.artist}')"
 
 
+"""
+
+Класс Point
+Реализуйте класс данных Point, описывающий точку на координатной плоскости. При создании экземпляра класс должен принимать два аргумента в следующем порядке:
+
+x — координата точки по оси 
+�
+x (тип float), по умолчанию имеет значение 0.0
+y — координата точки по оси 
+�
+y (тип float), по умолчанию имеет значение 0.0
+Экземпляр класса Point должен иметь три атрибута:
+
+x — координата точки по оси 
+�
+x
+y — координата точки по оси 
+�
+y
+quadrant — координатная четверть, к которой принадлежит точка (тип int). Если точка лежит на одной из осей, координатная четверть считается равной 0
+Класс Point должен иметь два метода экземпляра:
+
+symmetric_x() — метод, возвращающий новый экземпляр класса Point, представляющий точку, симметричную текущей точке относительно оси 
+�
+x
+symmetric_y() — метод, возвращающий новый экземпляр класса Point, представляющий точку, симметричную текущей точке относительно оси 
+�
+y
+Экземпляр класса Point должен иметь следующее формальное строковое представление:
+
+Point(x=<координата x>, y=<координата y>, quadrant=<координатная четверть>)
+Наконец, экземпляры класса Point должны поддерживать между собой операцию сравнения с помощью операторов == и!=. Две точки считаются равными, если их координаты по обеим осям совпадают.
+
+Примечание 1. Для точки с координатами 
+(
+�
+,
+�
+)
+(x,y) симметричной относительно оси 
+�
+x будем считать точку с координатами 
+(
+�
+,
+−
+�
+)
+(x,−y), симметричной относительно оси 
+�
+y — точку с координатами 
+(
+−
+�
+,
+�
+)
+(−x,y).
+
+Примечание 2. Координатные четверти:
+
+
+
+Примечание 3. Тестовые данные доступны по ссылкам:
+
+Архив с тестами
+GitHub
+Sample Input 1:
+
+point = Point()
+
+print(point)
+print(point.x)
+print(point.y)
+print(point.quadrant)
+Sample Output 1:
+
+Point(x=0.0, y=0.0, quadrant=0)
+0.0
+0.0
+0
+Sample Input 2:
+
+point = Point(1.0, 2.0)
+
+print(point.symmetric_x())
+print(point.symmetric_y())
+Sample Output 2:
+
+Point(x=1.0, y=-2.0, quadrant=4)
+Point(x=-1.0, y=2.0, quadrant=2)
+Sample Input 3:
+
+point1 = Point(1, 2)
+point2 = Point(1, 2)
+point3 = Point(3, 4)
+
+print(point1 == point2)
+print(point1 == point3)
+print(point2 != point3)
+Sample Output 3:
+
+True
+False
+True
+"""
+
+from dataclasses import dataclass, field
+
+@dataclass(order=True)
+class Point:
+    x: float = field(default=0.0)
+    y: float = field(default=0.0)
+    quadrant: int = field(init=False, default=0 , compare=False)
+
+    def __post_init__(self):
+        if self.x > 0 and self.y > 0:
+            self.quadrant = 1
+        elif self.x < 0 and self.y > 0:
+            self.quadrant =2
+        elif self.x < 0 and self.y < 0:
+            self.quadrant = 3
+        elif self.x > 0 and self.y < 0:
+            self.quadrant = 4
+
+
+    def symmetric_x(self):
+        return Point(self.x * (-1), self.y)
+
+    def symmetric_y(self):
+        return Point(self.x, self.y * (-1))
+
+    def __repr__(self):
+        return f"{self.__class__.__name__}(x='{self.x}', y='{self.y}, quadrant={self.quadrant}')"
 
 if __name__ == "__main__":
     city = City('Tokyo', 14043239, 1457)
@@ -154,3 +288,9 @@ if __name__ == "__main__":
 
     print(musicalbum1 == musicalbum2)
     print(musicalbum1 != musicalbum2)
+
+
+    point = Point(1.0, 2.0)
+
+    print(point.symmetric_x())
+    print(point.symmetric_y())
