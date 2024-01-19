@@ -266,13 +266,150 @@ class Point:
 
 
     def symmetric_x(self):
-        return Point(self.x * (-1), self.y)
-
-    def symmetric_y(self):
         return Point(self.x, self.y * (-1))
 
+    def symmetric_y(self):
+        return Point(self.x * (-1), self.y)
+
     def __repr__(self):
-        return f"{self.__class__.__name__}(x='{self.x}', y='{self.y}, quadrant={self.quadrant}')"
+        return f"{self.__class__.__name__}(x={self.x}, y={self.y}, quadrant={self.quadrant})"
+
+
+"""
+
+Классы FootballPlayer и FootballTeam
+1. Реализуйте класс данных FootballPlayer, описывающий футбольного игрока. При создании экземпляра класса должен принимать три аргумента в следующем порядке:
+
+name — имя футболиста (тип str)
+surname — фамилия футболиста (тип str)
+value — рыночная стоимость футболиста в евро (тип int)
+Экземпляр класса FootballPlayer должен иметь три атрибута:
+
+name — имя футболиста
+surname — фамилия футболиста
+value — рыночная стоимость футболиста в евро
+Также экземпляр класса FootballPlayer должен иметь следующее формальное строковое представление:
+
+FootballPlayer(name='<имя футболиста>', surname='<фамилия футболиста>')
+Наконец, экземпляры класса FootballPlayer должны поддерживать между собой все операции сравнения с помощью операторов ==, !=, >, <, >=, <=. Два футболиста считаются равными, если их рыночные стоимости совпадают. Футболист считается больше другого футболиста, если его рыночная стоимость больше.
+
+2. Реализуйте класс данных FootballTeam, описывающий футбольную команду. При создании экземпляра класса должен принимать один аргумент:
+
+name — название команды (тип str)
+Экземпляр класса FootballTeam должен иметь два атрибута:
+
+name — название команды (тип str)
+players — изначально пустой список, содержащий игроков команды (тип list)
+Класс FootballTeam должен иметь один метод экземпляра:
+
+add_players() — метод, принимающий произвольное количество позиционных аргументов, каждый из которых представляет футболиста, и добавляющий их в команду
+Также экземпляр класса FootballTeam должен иметь следующее формальное строковое представление:
+
+FootballTeam(name='<название футбольной команды>')
+Наконец, экземпляры класса FootballTeam должны поддерживать между собой операции сравнения с помощью операторов == и !=. Две футбольные команды считаются равными, если их названия совпадают.
+
+Примечание 1. Дополнительная проверка данных на корректность не требуется. Гарантируется, что реализованные классы используются только с корректными данными.
+
+Примечание 2. Никаких ограничений касательно реализаций классов нет, они могут быть произвольными.
+
+Примечание 3. Тестовые данные доступны по ссылкам:
+
+Архив с тестами
+GitHub
+Sample Input 1:
+
+player = FootballPlayer('Kylian', 'Mbappe', 180000000)
+
+print(player)
+print(player.name)
+print(player.surname)
+print(player.value)
+Sample Output 1:
+
+FootballPlayer(name='Kylian', surname='Mbappe')
+Kylian
+Mbappe
+180000000
+Sample Input 2:
+
+player1 = FootballPlayer('Jude', 'Bellingham', 120000000)
+player2 = FootballPlayer('Vinicius', 'Junior', 120000000)
+player3 = FootballPlayer('Kylian', 'Mbappe', 180000000)
+
+print(player1 == player2)
+print(player1 == player3)
+print(player1 > player3)
+print(player1 < player3)
+Sample Output 2:
+
+True
+False
+False
+True
+Sample Input 3:
+
+team = FootballTeam('PSG')
+
+print(team)
+print(team.name)
+print(team.players)
+
+team.add_players(FootballPlayer('Kylian', 'Mbappe', 180000000))
+print(team.players)
+Sample Output 3:
+
+FootballTeam(name='PSG')
+PSG
+[]
+[FootballPlayer(name='Kylian', surname='Mbappe')]
+Sample Input 4:
+
+team1 = FootballTeam('PSG')
+team2 = FootballTeam('PSG')
+team3 = FootballTeam('Arsenal')
+
+player1 = FootballPlayer('Jude', 'Bellingham', 120000000)
+player2 = FootballPlayer('Vinicius', 'Junior', 110000000)
+player3 = FootballPlayer('Kylian', 'Mbappe', 180000000)
+
+team1.add_players(player1)
+team2.add_players(player2)
+team3.add_players(player3)
+
+print(team1 == team2)
+print(team1 != team2)
+print(team1 == team3)
+print(team1 != team3)
+Sample Output 4:
+
+True
+False
+False
+True
+
+"""
+
+from dataclasses import dataclass, field
+
+@dataclass(order=True)
+class FootballPlayer:
+    name: str = field(compare=False)
+    surname: str = field(compare=False)
+    value: int
+
+    def __repr__(self):
+        return f"{self.__class__.__name__}(name='{self.name}', surname='{self.surname}')"
+    
+@dataclass(order=True)
+class FootballTeam:
+    name: str
+    players: list = field(default_factory=list, compare=False, repr=False)
+    
+    
+    def add_players(self, *args, **kwargs):
+        add_football_players = list(args) + list(kwargs.values())
+        self.players += add_football_players
+
 
 if __name__ == "__main__":
     city = City('Tokyo', 14043239, 1457)
@@ -294,3 +431,20 @@ if __name__ == "__main__":
 
     print(point.symmetric_x())
     print(point.symmetric_y())
+
+    team1 = FootballTeam('PSG')
+    team2 = FootballTeam('PSG')
+    team3 = FootballTeam('Arsenal')
+
+    player1 = FootballPlayer('Jude', 'Bellingham', 120000000)
+    player2 = FootballPlayer('Vinicius', 'Junior', 110000000)
+    player3 = FootballPlayer('Kylian', 'Mbappe', 180000000)
+
+    team1.add_players(player1)
+    team2.add_players(player2)
+    team3.add_players(player3)
+
+    print(team1 == team2)
+    print(team1 != team2)
+    print(team1 == team3)
+    print(team1 != team3)
