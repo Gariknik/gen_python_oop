@@ -404,8 +404,7 @@ class FootballPlayer:
 class FootballTeam:
     name: str
     players: list = field(default_factory=list, compare=False, repr=False)
-    
-    
+      
     def add_players(self, *args, **kwargs):
         add_football_players = list(args) + list(kwargs.values())
         self.players += add_football_players
@@ -448,3 +447,7 @@ if __name__ == "__main__":
     print(team1 != team2)
     print(team1 == team3)
     print(team1 != team3)
+    from datetime import timedelta
+    f = timedelta(weeks=2, hours=25, minutes=25)
+    print(f.days)
+    print(f.seconds)
