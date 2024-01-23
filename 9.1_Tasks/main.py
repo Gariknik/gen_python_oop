@@ -52,6 +52,63 @@ class CaesarCipher:
                 result += ch
         return result
     
+
+"""
+Классы ArithmeticProgression и GeometricProgression
+Реализуйте класс ArithmeticProgression для генерации членов арифметической прогрессии. При создании экземпляра класса ArithmeticProgression должны указываться первый член последовательности и разность прогрессии:
+
+progression = ArithmeticProgression(0, 1)
+
+for elem in progression:
+    if elem > 10:
+        break
+    print(elem, end=' ')    # 0 1 2 3 4 5 6 7 8 9 10
+Обратите внимание, что арифметическая прогрессия должна быть итерируемой, а также бесконечной.
+
+Аналогичным образом реализуйте класс GeometricProgression для генерации членов геометрической прогрессии. При создании экземпляра класса GeometricProgression должны указываться первый член последовательности и знаменатель прогрессии:
+
+progression = GeometricProgression(1, 2)
+
+for elem in progression:
+    if elem > 10:
+        break
+    print(elem, end=' ')    # 1 2 4 8
+Геометрическая прогрессия, как и арифметическая, должна быть итерируемой, а также бесконечной.
+
+Примечание. Тестовые данные доступны по ссылкам:
+
+"""
+from abc import ABC, abstractmethod
+
+class Progression(ABC):
+    def __init__(self, first, step):
+        self.first = first
+        self.step = step
+
+    def __iter__(self):
+        return self
+    
+    @abstractmethod
+    def __next__(self):
+        pass
+
+
+
+class ArithmeticProgression(Progression):
+    def __next__(self):
+        it = self.first
+        self.first += self.step
+        return it
+
+class GeometricProgression(Progression):
+    def __next__(self):
+        it = self.first
+        self.first *= self.step
+        return it
+
+
+
+
 if __name__ == '__main__':
     cipher = CaesarCipher(10)
 
@@ -70,3 +127,19 @@ if __name__ == '__main__':
 
     decode_words = [cipher.decode(word) for word in encode_words]
     print(decode_words)
+
+
+    # progression = ArithmeticProgression(0, 1)
+
+    # for elem in progression:
+    #     if elem > 10:
+    #         break
+    #     print(elem, end=' ')
+
+
+    progression = GeometricProgression(1, 2)
+
+    for elem in progression:
+        if elem > 10:
+            break
+        print(elem, end=' ')
