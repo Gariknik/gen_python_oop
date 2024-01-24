@@ -106,6 +106,72 @@ class GeometricProgression(Progression):
         self.first *= self.step
         return it
 
+"""
+Классы Domain и DomainException
+Реализуйте класс исключений DomainException. Также реализуйте класс Domain для работы с доменами. Класс Domain должен поддерживать три способа создания своего экземпляра: напрямую через вызов класса, а также с помощью двух методов класса from_url() и from_email():
+
+domain1 = Domain('pygen.ru')                       # непосредственно на основе домена
+domain2 = Domain.from_url('https://pygen.ru')      # на основе url-адреса
+domain3 = Domain.from_email('support@pygen.ru')    # на основе адреса электронной почты
+При попытке создания экземпляра класса Domain на основе некорректных домена, url-адреса или адреса электронной почты должно быть возбуждено исключение DomainException с текстом:
+
+Недопустимый домен, url или email
+В качестве неформального строкового представления экземпляр класса Domain должен иметь собственный домен:
+
+print(str(domain1))                                # pygen.ru
+print(str(domain2))                                # pygen.ru
+print(str(domain3))                                # pygen.ru
+Примечание 1. Будем считать домен корректным, если он представляет собой последовательность из одной или более латинских букв, за которой следует точка, а затем снова одна или более латинских букв.
+
+Примечание 2. Будем считать url-адрес корректным, если он представляет собой строку http:// или https://, за которой следует корректный домен. 
+
+Примечание 3. Будем считать адрес электронной почты корректным, если он представляет собой последовательность из одной или более латинских букв, за которой следует собачка (@), а затем корректный домен.
+
+Примечание 4. Тестовые данные доступны по ссылкам:
+
+Архив с тестами
+GitHub
+
+"""
+import re
+
+class DomainException(Exception):
+    pass
+
+class Domain:
+    PATTERN = r'(?:http[s]?://|[a-zA-Z_]+@)?'
+    FIND_MAIL_PATTERN = r'^[a-zA-Z_]+@\w+\.\w+$'
+    FIND_URL_PATTERN = r'^(?:(?:http[s]?://[a-zA-Z_]+\.\w+)|(?:[a-zA-Z_]+\.\w+))$'
+    
+    def __init__(self, domain):
+        if self.check_option(self.FIND_URL_PATTERN, domain):
+            self.domain = re.sub(self.PATTERN, '', domain)
+        elif self.check_option(self.FIND_MAIL_PATTERN, domain):
+            self.domain = re.sub(self.PATTERN, '', domain)
+
+    @classmethod
+    def from_url(cls, url):
+        if cls.check_option(cls.FIND_URL_PATTERN, url):
+            return cls(re.sub(Domain.PATTERN, '', url))
+                  
+    @classmethod
+    def from_email(cls, mail):
+        if cls.check_option(cls.FIND_MAIL_PATTERN, mail):
+            return cls(re.sub(cls.PATTERN, '', mail))
+    
+    @staticmethod    
+    def check_option(pattern, domain):
+        if re.findall(pattern, domain):
+            return True
+        raise DomainException('Недопустимый домен, url или email')
+
+    def __str__(self):
+        return self.domain
+
+
+
+
+
 
 
 
@@ -137,9 +203,17 @@ if __name__ == '__main__':
     #     print(elem, end=' ')
 
 
-    progression = GeometricProgression(1, 2)
+    # progression = GeometricProgression(1, 2)
 
-    for elem in progression:
-        if elem > 10:
-            break
-        print(elem, end=' ')
+    # for elem in progression:
+    #     if elem > 10:
+    #         break
+    #     print(elem, end=' ')
+
+    domain1 = Domain('pygen.ru')                       # непосредственно на основе домена
+    domain2 = Domain.from_url('https://pygen.ru')      # на основе url-адреса
+    domain3 = Domain.from_email('support@pygen.ru')    # на основе адреса электронной почты
+
+    print(type(domain1))
+    print(type(domain2))
+    print(type(domain3))
