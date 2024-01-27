@@ -270,6 +270,40 @@ GitHub
 
 """    
 
+class Pagination:
+    
+
+    def __init__(self, text, size):
+        self.total_pages = len(text) // size + 1 if len(text) % size else len(text) // size
+        self.matrix = [text[size*i:size*(i+1)] for i in range(self.total_pages)]
+        self.current_page = 1
+
+    def get_visible_items(self):
+        return self.matrix[self.current_page-1]
+    
+    def next_page(self):
+        if self.current_page + 1 < self.total_pages-1:
+            self.current_page += 1
+        return self
+
+    def prev_page(self):
+        if self.current_page - 1 > 0:
+            self.current_page -= 1
+        return self
+
+    def first_page(self):
+        self.current_page = 1
+        return self
+
+    def last_page(self):
+        self.current_page = len(self.matrix)
+        return self
+
+    def go_to_page(self, num):
+        if num - 1 > self.total_pages: self.current_page = len(self.matrix)
+        elif num - 1 < 0: self.current_page = 1
+        else: self.current_page = num
+        return self
 
 
 if __name__ == '__main__':
@@ -329,3 +363,13 @@ if __name__ == '__main__':
     high_score_table.update(11)
     high_score_table.update(13)
     print(high_score_table.scores)
+
+
+    alphabet = list('abcdefghijklmnopqrstuvwxyz')
+
+    pagination = Pagination(alphabet, 4)
+    pagination.go_to_page(-100)
+    print(pagination.get_visible_items())
+
+    pagination.go_to_page(100)
+    print(pagination.get_visible_items())
