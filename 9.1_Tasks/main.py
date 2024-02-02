@@ -359,7 +359,122 @@ class Student:
 
 
     
+"""
+Класс TicTacToe
+Реализуйте класс TicTacToe для игры в Крестики-Нолики. Экземпляр класса TicTacToe должен представлять собой игровое поле из трех строк и трех столбцов, на котором игроки по очереди могут помечать свободные клетки. Первый ход делает игрок, ставящий крестики:
+
+tictactoe = TicTacToe()
+
+tictactoe.mark(1, 1)         # помечаем крестиком клетку с координатами (1; 1)
+tictactoe.mark(3, 1)         # помечаем ноликом клетку с координатами (3; 1)
+Помечать уже помеченные клетки нельзя. При попытке сделать это должен быть выведен текст Недоступная клетка:
+
+tictactoe.mark(1, 1)         # Недоступная клетка
+
+tictactoe.mark(1, 3)         # помечаем крестиком клетку с координатами (1; 3)
+tictactoe.mark(1, 2)         # помечаем ноликом клетку с координатами (1; 2)
+tictactoe.mark(3, 3)         # помечаем крестиком клетку с координатами (3; 3)
+tictactoe.mark(2, 2)         # помечаем ноликом клетку с координатами (2; 2)
+tictactoe.mark(2, 3)         # помечаем крестиком клетку с координатами (2; 3)
+С помощью метода winner() должна быть возможность узнать победителя игры. Метод должен вернуть:
+
+символ X, если победил игрок, ставящий крестики
+символ O, если победил игрок, ставящий нолики
+строку Ничья, если произошла ничья
+значение None, если победитель еще не определен
+print(tictactoe.winner())    # X
+Помечать клетки после завершения игры нельзя. При попытке сделать это должен быть выведен текст Игра окончена:
+
+tictactoe.mark(2, 1)         # Игра окончена
+С помощью метода show() должна быть возможность посмотреть текущее состояние игрового поля. Оно должно быть построено из символов | и -, а также X и O, если игроками были сделаны какие-либо ходы. Для приведенного выше поля tictactoe вызов tictactoe.show() должен вывести следующее:
+
+X|O|X
+-----
+ |O|X
+-----
+O| |X
+Примечание. Тестовые данные доступны по ссылкам:
+
+"""
+
+class TicTacToe:
+    X = "X"
+    O = "O"
+
+    def __init__(self):
+        self.pole = [["" for _ in range(3)] for _ in range(3)]
+        self.move = 1
+
+    def mark(self, row, col):
+        if not self.pole[row-1][col-1] and self.winner() is None:
+            self.pole[row-1][col-1] = (self.O, self.X)[self.move % 2]
+            self.move += 1
+        elif self.winner():
+            print("Игра окончена")
+        else:
+            print('Недоступная клетка')
+
+    def show(self):
+        print('\n-----\n'.join(['|'.join([col if col else ' ' for col in row]) for row in self.pole]))
+
+    def winner(self):
+        if any([all(el == self.X for el in row) for row in self.pole]) or\
+        any([all(self.pole[j][i] == self.X for j in range(3)) for i in range(3)]) or \
+        all(self.pole[i][i] == self.O for i in range(3)) or \
+        all(self.pole[i][i] == self.X for i in range(2, -1, -1)):
+            return self.X
+        elif any([all(el == self.O for el in row) for row in self.pole]) or\
+        any([all(self.pole[j][i] == self.O for j in range(3)) for i in range(3)]) or \
+        all(self.pole[i][i] == self.O for i in range(3)) or \
+        all(self.pole[i][i] == self.O for i in range(2, -1, -1)):
+            return self.O
+        elif all([all(bool(el) for el in row) for row in self.pole]):
+            return "Ничья"
+
+
+
+
+
+
+
+
+
+
+    # Напишите определение классов Product и ShoppingCart 
+from dataclasses import dataclass, field
+
+@dataclass(order=True)
+class Product:
+    name: str
+    price: float = field(compare=False)
+
+class ShoppingCart:
+    def __init__(self):
+        self._items = []
+        self.__total_price = 0
+    
+    @property
+    def items(self):
+        return sorted(self._items, key=lambda x: (x.price, x.name))
+    
+    @property
+    def total_price(self):
+        return sum([x.price for x in self._items])
+    
+    
+    def add_item(self, item):
+        self._items.append(item)
         
+    def remove_item(self, item):
+        if item in self._items:
+            self._items.remove(item)
+        else:
+            raise ValueError
+    
+    def __len__(self):
+        return len(self.items)
+
+
 
 
 
@@ -441,3 +556,54 @@ if __name__ == '__main__':
     student = Student()
 
     print(student.tests_taken)
+
+
+        
+
+
+    apple = Product("Apple", 1.5)
+    banana = Product("Banana", 0.75)
+    chocolate = Product("Chocolate", 2.99)
+
+    cart = ShoppingCart()
+    cart.add_item(banana)
+    cart.add_item(apple)
+    cart.add_item(chocolate)
+
+    assert len(cart) == 3
+    assert cart.items == [banana, apple, chocolate]
+
+    milk = Product('Milk', 1)
+    cart.add_item(milk)
+    assert cart.items == [banana, milk, apple, chocolate]
+    print("Items in the cart:", [item.name for item in cart.items])
+    print("Total price:", cart.total_price)
+    assert cart.total_price == 6.24
+    cart.add_item(banana)
+    assert len(cart) == 5
+    assert cart.total_price == 6.99
+    cart.remove_item(milk)
+    assert len(cart) == 4
+    cart.remove_item(banana)
+    cart.remove_item(banana)
+    assert len(cart) == 2
+    try:
+        cart.remove_item(banana)
+    except ValueError:
+        pass
+
+
+    tictactoe = TicTacToe()
+
+    tictactoe.mark(1, 1)
+    tictactoe.mark(3, 2)
+    tictactoe.mark(1, 1)
+
+    tictactoe.mark(1, 3)
+    tictactoe.mark(1, 2)
+    tictactoe.mark(3, 3)
+    tictactoe.mark(2, 2)
+    tictactoe.mark(2, 3)
+
+    print(tictactoe.winner())
+    tictactoe.show()
